@@ -14,7 +14,7 @@
     <title>QueueEase - Smart Queue Management</title>
 
     <!-- BLACK + GOLD THEME -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -176,300 +176,63 @@
 
     <!-- ================= CATEGORIES ================= -->
 
-    <div class="section-heading">
+    
+         
+
+      
+        
+           <div class="category-grid" id="categoryGrid">
+
+    <button class="category-card" onclick="selectCategory('Hospital')">
+        <div class="category-icon">🏥</div>
+        <h3>Health</h3>
+        <p>Hospitals & healthcare</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('College')">
+        <div class="category-icon">🎓</div>
+        <h3>College</h3>
+        <p>Education & campus</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('Salon')">
+        <div class="category-icon">💇</div>
+        <h3>Salon</h3>
+        <p>Beauty & grooming</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('Restaurant')">
+        <div class="category-icon">🍽️</div>
+        <h3>Food</h3>
+        <p>Restaurants & dining</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('Bank')">
+        <div class="category-icon">🏦</div>
+        <h3>Bank</h3>
+        <p>Banking services</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('Service Center')">
+        <div class="category-icon">🔧</div>
+        <h3>Service</h3>
+        <p>Repairs & services</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('Rental')">
+        <div class="category-icon">🚗</div>
+        <h3>Rental</h3>
+        <p>Bike & car rental</p>
+    </button>
+
+    <button class="category-card" onclick="selectCategory('Government')">
+        <div class="category-icon">🏛️</div>
+        <h3>Govt</h3>
+        <p>Public services</p>
+    </button>
+
+</div>
 
-        <h2>
-            Categories
-        </h2>
-
-        <button onclick="showAllCategories()">
-            See all
-        </button>
-
-    </div>
-
-
-    <div class="category-grid"
-         id="categoryGrid">
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Hospital')">
-
-            <div>🏥</div>
-
-            <span>
-                Health
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('College')">
-
-            <div>🎓</div>
-
-            <span>
-                College
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Salon')">
-
-            <div>💇</div>
-
-            <span>
-                Salon
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Restaurant')">
-
-            <div>🍽️</div>
-
-            <span>
-                Food
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Bank')">
-
-            <div>🏦</div>
-
-            <span>
-                Bank
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Service Center')">
-
-            <div>🔧</div>
-
-            <span>
-                Service
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Rental')">
-
-            <div>🚗</div>
-
-            <span>
-                Rental
-            </span>
-
-        </button>
-
-
-        <button
-            class="category-card"
-            onclick="selectCategory('Government')">
-
-            <div>🏛️</div>
-
-            <span>
-                Govt
-            </span>
-
-        </button>
-
-    </div>
-
-
-    <!-- ================= NEARBY ================= -->
-
-    <div class="section-heading">
-
-        <h2>
-            Nearby & Popular
-        </h2>
-
-        <button onclick="loadOrganizations()">
-            See all
-        </button>
-
-    </div>
-
-
-    <div id="organizationList"
-         class="organization-list">
-
-        <div class="business-card">
-
-            <div class="business-image hospital-image">
-                🏥
-            </div>
-
-            <div class="business-content">
-
-                <div class="rating">
-                    ★ 4.8
-                </div>
-
-                <h3>
-                    QueueEase Hospital
-                </h3>
-
-                <p>
-                    Healthcare • Hyderabad
-                </p>
-
-                <div class="business-bottom">
-
-                    <span>
-                        🟢 Open
-                    </span>
-
-                    <span>
-                        ⏱ 15 min wait
-                    </span>
-
-                </div>
-
-                <button
-                    onclick="openOrganization(1)"
-                    class="details-button">
-
-                    View details →
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="business-card">
-
-            <div class="business-image bank-image">
-                🏦
-            </div>
-
-            <div class="business-content">
-
-                <div class="rating">
-                    ★ 4.6
-                </div>
-
-                <h3>
-                    QueueEase Bank
-                </h3>
-
-                <p>
-                    Banking • Hyderabad
-                </p>
-
-                <div class="business-bottom">
-
-                    <span>
-                        🟢 Open
-                    </span>
-
-                    <span>
-                        ⏱ 10 min wait
-                    </span>
-
-                </div>
-
-                <button
-                    onclick="selectCategory('Bank')"
-                    class="details-button">
-
-                    View details →
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ================= DISCOVER ================= -->
-
-<section id="discoverSection"
-         class="section">
-
-    <div class="page-title">
-
-        <button onclick="showSection('home')">
-            ←
-        </button>
-
-        <div>
-
-            <h1>
-                Discover
-            </h1>
-
-            <p>
-                Find queues near you
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="search-box">
-
-        <span>
-            🔍
-        </span>
-
-        <input
-            id="discoverSearch"
-            placeholder="Search organizations..."
-        >
-
-    </div>
-
-
-    <div id="discoverCategories"
-         class="category-grid">
-    </div>
-
-
-    <div class="map-container">
-
-        <div
-            id="queueEaseMap"
-            style="width: 100%; height: 320px;">
-        </div>
-
-    </div>
-
-
-    <div id="discoverList"
-         class="organization-list">
-    </div>
-
-</section>
 
 
 <!-- ================= QUEUE ================= -->

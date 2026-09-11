@@ -1738,4 +1738,41 @@ section {
     .btn {
         width: 100%;
     }
+    /* ---------- CATEGORY ICONS ---------- */
+
+.category-card .category-icon {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+
+    margin-bottom: 14px;
+
+    border-radius: 14px;
+
+    background: rgba(212, 175, 55, 0.10);
+
+    font-size: 28px;
+    line-height: 1;
+
+    transition: 0.3s ease;
+}
+
+.category-card:hover .category-icon {
+    background: rgba(212, 175, 55, 0.18);
+    transform: scale(1.08);
+}
+
+.category-card h3 {
+    color: var(--gold-light);
+}
+
+.category-card p {
+    color: var(--muted);
+}
 }
