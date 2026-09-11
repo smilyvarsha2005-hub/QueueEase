@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QueueEase — Find it. Join it. Track it.</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" data-page="home">
+        <span class="brand-mark">Q</span>
+        <span>
+          <strong>Queue<span>Ease</span></strong>
+          <small>Skip the wait.</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav">
+        <a href="#" data-page="home">Home</a>
+        <a href="#" data-page="discover">Discover</a>
+        <a href="#" data-page="myqueue">My Queue</a>
+      </nav>
+
+      <div class="top-actions">
+        <button class="icon-btn" id="notificationBtn" aria-label="Notifications">◔</button>
+        <button class="outline-btn" id="listBusinessBtn">List Your Business</button>
+        <button class="profile-btn" id="profileBtn">V</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- HOME -->
+      <section class="page active" id="homePage">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="pulse"></span> LIVE QUEUES AROUND YOU</div>
+            <h1>Find it.<br><span>Join it.</span><br>Track it.</h1>
+            <p>Discover nearby services, join a digital queue, and know exactly when it's your turn — without standing around.</p>
+
+            <div class="hero-search">
+              <span>⌕</span>
+              <input id="homeSearch" type="search" placeholder="Search hospitals, colleges, salons, restaurants..." />
+              <button id="homeSearchBtn">Search</button>
+            </div>
+
+            <div class="hero-links">
+              <button id="useLocationBtn">⌖ Use my location</button>
+              <span>or</span>
+              <button id="scanQrBtn">▦ Scan QueueEase QR</button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="phone">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="mini-head">
+                  <span>QueueEase</span><span>⌁</span>
+                </div>
+                <div class="mini-greeting">Good morning 👋</div>
+                <div class="mini-search">⌕ Search a service</div>
+                <div class="mini-label">Popular categories</div>
+                <div class="mini-cats">
+                  <span>🏥<b>Health</b></span>
+                  <span>🎓<b>College</b></span>
+                  <span>🍽️<b>Food</b></span>
+                  <span>💇<b>Salon</b></span>
+                </div>
+                <div class="mini-ticket">
+                  <small>ACTIVE QUEUE</small>
+                  <strong>A42</strong>
+                  <div><span>12 ahead</span><span>~15 min</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="float-card card-wait"><b>15 min</b><small>estimated wait</small></div>
+            <div class="float-card card-live"><i></i> Queue is live</div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">EXPLORE</div>
+            <h2>What are you looking for?</h2>
+          </div>
+          <button class="text-btn" data-page="discover">View all →</button>
+        </div>
+
+        <div class="category-grid" id="categoryGrid"></div>
+
+        <div class="section-head nearby-head">
+          <div>
+            <div class="eyebrow">NEARBY & POPULAR</div>
+            <h2>Queues worth checking</h2>
+          </div>
+          <div class="location-chip" id="locationChip">⌖ Hyderabad · 10 km</div>
+        </div>
+        <div class="business-grid" id="homeBusinessGrid"></div>
+      </section>
+
+      <!-- DISCOVER -->
+      <section class="page" id="discoverPage">
+        <div class="discover-top">
+          <div>
+            <div class="eyebrow">DISCOVER</div>
+            <h1>Find a place. <span>Skip the line.</span></h1>
+            <p>Choose a category or search directly for an organization or service.</p>
+          </div>
+          <button class="soft-btn" id="discoverQrBtn">▦ Scan QR</button>
+        </div>
+
+        <div class="discover-controls">
+          <div class="large-search"><span>⌕</span><input id="discoverSearch" type="search" placeholder="Search organization or service..." /></div>
+          <button class="filter-btn" id="nearbyFilter">⌖ Near me</button>
+          <button class="filter-btn" id="sortBtn">↕ Sort: Recommended</button>
+        </div>
+
+        <div class="filter-row" id="discoverCategories"></div>
+        <div class="result-meta"><span id="resultCount"></span><span class="live-legend"><i></i> Live queue data</span></div>
+        <div class="business-grid discover-grid" id="discoverGrid"></div>
+      </section>
+
+      <!-- BUSINESS DETAIL -->
+      <section class="page" id="businessPage">
+        <button class="back-btn" id="backToDiscover">← Back to results</button>
+        <div id="businessDetail"></div>
+      </section>
+
+      <!-- MY QUEUE -->
+      <section class="page" id="myqueuePage">
+        <div class="discover-top">
+          <div>
+            <div class="eyebrow">MY QUEUE</div>
+            <h1>Your digital <span>waiting room.</span></h1>
+            <p>Track your active token without staying at the counter.</p>
+          </div>
+        </div>
+        <div id="myQueueContent"></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-brand"><span class="brand-mark">Q</span><b>QueueEase</b></div>
+      <span>Find it. Join it. Track it.</span>
+      <span>© 2026 QueueEase</span>
+    </footer>
+  </div>
+
+  <!-- JOIN MODAL -->
+  <div class="modal-backdrop" id="joinModal">
+    <div class="modal join-modal">
+      <button class="close-modal" data-close="joinModal">×</button>
+      <div class="modal-icon">🎫</div>
+      <div class="eyebrow">JOIN DIGITAL QUEUE</div>
+      <h2 id="joinBusinessName">Business</h2>
+      <p id="joinServiceHint">Choose a service to continue.</p>
+      <div class="service-list" id="serviceList"></div>
+      <div class="notification-choice">
+        <label>How should we notify you?</label>
+        <div class="notify-options">
+          <button class="notify-option active" data-notify="browser">🔔 Browser</button>
+          <button class="notify-option" data-notify="sms">📱 SMS</button>
+          <button class="notify-option" data-notify="email">✉ Email</button>
+          <button class="notify-option" data-notify="call">☎ Call</button>
+        </div>
+      </div>
+      <button class="primary-btn full" id="confirmJoinBtn">Join Queue →</button>
+    </div>
+  </div>
+
+  <!-- TICKET MODAL -->
+  <div class="modal-backdrop" id="ticketModal">
+    <div class="modal ticket-modal">
+      <button class="close-modal" data-close="ticketModal">×</button>
+      <div class="ticket-top">
+        <span class="live-pill"><i></i> ACTIVE NOW</span>
+        <span id="ticketCategory">Service</span>
+      </div>
+      <div class="ticket-brand" id="ticketBusiness">QueueEase</div>
+      <div class="ticket-number" id="ticketNumber">A42</div>
+      <div class="ticket-service" id="ticketService">General Service</div>
+      <div class="ticket-stats">
+        <div><b id="ticketAhead">12</b><small>People ahead</small></div>
+        <div><b id="ticketWait">15 min</b><small>Estimated wait</small></div>
+      </div>
+      <div class="progress"><span id="ticketProgress"></span></div>
+      <p class="ticket-note">This estimate updates as the queue moves.</p>
+      <div class="ticket-actions">
+        <button class="soft-btn" id="openMyQueueBtn">View My Queue</button>
+        <button class="danger-btn" id="leaveQueueBtn">Leave Queue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR MODAL -->
+  <div class="modal-backdrop" id="qrModal">
+    <div class="modal qr-modal">
+      <button class="close-modal" data-close="qrModal">×</button>
+      <div class="eyebrow">QUEUEEASE QR</div>
+      <h2>Scan to join a queue</h2>
+      <p>For the demo, use the sample QR below or enter an organization code.</p>
+      <div class="fake-qr" id="fakeQr"></div>
+      <input class="code-input" id="qrCodeInput" placeholder="e.g. QEA-1024" />
+      <button class="primary-btn full" id="qrContinueBtn">Continue →</button>
+    </div>
+  </div>
+
+  <!-- BUSINESS MODAL -->
+  <div class="modal-backdrop" id="businessModal">
+    <div class="modal">
+      <button class="close-modal" data-close="businessModal">×</button>
+      <div class="modal-icon">🏢</div>
+      <div class="eyebrow">FOR ORGANIZATIONS</div>
+      <h2>Bring your queue online.</h2>
+      <p>QueueEase lets your customers join digitally while your staff manage tokens in real time.</p>
+      <div class="business-benefits">
+        <span>✓ Digital tokens</span><span>✓ Live queue</span><span>✓ QR joining</span><span>✓ Notifications</span>
+      </div>
+      <button class="primary-btn full" id="businessDemoBtn">View Business Demo →</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

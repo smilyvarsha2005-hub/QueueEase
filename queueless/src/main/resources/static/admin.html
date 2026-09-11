@@ -1,0 +1,2776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>QueueEase | Admin Dashboard</title>
+
+    <style>
+
+        /* =====================================================
+           QUEUEEASE ADMIN
+           BLACK + GOLD LUXURY THEME
+        ===================================================== */
+
+        :root {
+
+            --black: #070707;
+            --black-2: #0c0c0c;
+            --black-3: #121212;
+            --black-4: #181818;
+
+            --gold: #d6a84f;
+            --gold-light: #f1cf7a;
+            --gold-dark: #9b7027;
+
+            --white: #f8f5ed;
+            --text: #eeeae1;
+            --muted: #96928a;
+
+            --border:
+                rgba(214,168,79,0.25);
+
+            --border-light:
+                rgba(255,255,255,0.08);
+
+            --green: #55e6a5;
+
+            --shadow:
+                0 25px 70px rgba(0,0,0,0.55);
+
+            --gold-shadow:
+                0 15px 45px rgba(214,168,79,0.12);
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 85% 0%,
+                    rgba(214,168,79,0.08),
+                    transparent 32%
+                ),
+                var(--black);
+
+            color: var(--text);
+
+            padding-bottom: 40px;
+        }
+
+
+        button,
+        select {
+
+            font-family: inherit;
+        }
+
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           SCROLLBAR
+        ===================================================== */
+
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background: var(--black);
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 20px;
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+        ===================================================== */
+
+        .dashboard {
+
+            width: 92%;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding:
+                30px
+                0
+                50px;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 55px;
+
+            padding-bottom: 20px;
+
+            border-bottom:
+                1px solid
+                var(--border-light);
+        }
+
+
+        .logo-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .logo-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            border:
+                1px solid
+                var(--gold);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color:
+                var(--gold-light);
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+            transform:
+                rotate(45deg);
+        }
+
+
+        .logo-icon span {
+
+            transform:
+                rotate(-45deg);
+        }
+
+
+        .logo {
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color:
+                var(--white);
+        }
+
+
+        .logo span {
+
+            color:
+                var(--gold);
+        }
+
+
+        .logo-subtitle {
+
+            color:
+                var(--muted);
+
+            font-size: 8px;
+
+            letter-spacing:
+                2px;
+
+            margin-top: 5px;
+        }
+
+
+        .admin-badge {
+
+            padding:
+                10px
+                17px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(214,168,79,0.07);
+
+            border:
+                1px solid
+                var(--border);
+
+            color:
+                var(--gold-light);
+
+            font-size: 10px;
+
+            letter-spacing:
+                1.5px;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .welcome {
+
+            margin-bottom: 35px;
+        }
+
+
+        .welcome-kicker {
+
+            color:
+                var(--gold);
+
+            font-size: 10px;
+
+            letter-spacing:
+                2.5px;
+
+            font-weight: bold;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .welcome h1 {
+
+            margin:
+                8px 0 0;
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size:
+                clamp(
+                    38px,
+                    5vw,
+                    60px
+                );
+
+            line-height: 1;
+
+            color:
+                var(--white);
+        }
+
+
+        .welcome h1 span {
+
+            color:
+                var(--gold);
+        }
+
+
+        .welcome p {
+
+            margin:
+                14px 0 0;
+
+            color:
+                var(--muted);
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           ORGANIZATION
+        ===================================================== */
+
+        .organization {
+
+            background:
+                radial-gradient(
+                    circle at 90% 0%,
+                    rgba(214,168,79,0.10),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    145deg,
+                    #17130d,
+                    #0d0d0d
+                );
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                24px;
+
+            padding:
+                26px;
+
+            margin-bottom:
+                25px;
+
+            box-shadow:
+                var(--gold-shadow);
+        }
+
+
+        .organization-top {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+        }
+
+
+        .org-kicker {
+
+            color:
+                var(--gold);
+
+            font-size: 9px;
+
+            letter-spacing:
+                1.8px;
+
+            font-weight: bold;
+        }
+
+
+        .org-name {
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size:
+                25px;
+
+            font-weight:
+                bold;
+
+            color:
+                var(--white);
+
+            margin-top:
+                5px;
+        }
+
+
+        .service {
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            margin-top:
+                6px;
+        }
+
+
+        .live {
+
+            display: flex;
+
+            align-items:
+                center;
+
+            gap: 7px;
+
+            color:
+                var(--green);
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1.5px;
+
+            font-weight:
+                bold;
+        }
+
+
+        .live::first-letter {
+            color:
+                var(--green);
+        }
+
+
+        /* =====================================================
+           SELECTORS
+        ===================================================== */
+
+        .selectors {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                15px;
+
+            margin-top:
+                25px;
+        }
+
+
+        .selector-group {
+
+            display: flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                8px;
+        }
+
+
+        .selector-group label {
+
+            color:
+                var(--gold);
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                1.5px;
+
+            font-weight:
+                bold;
+        }
+
+
+        select {
+
+            width: 100%;
+
+            padding:
+                14px 15px;
+
+            border-radius:
+                11px;
+
+            border:
+                1px solid
+                var(--border-light);
+
+            background:
+                #0b0b0b;
+
+            color:
+                var(--white);
+
+            font-size:
+                13px;
+
+            outline:
+                none;
+
+            cursor:
+                pointer;
+        }
+
+
+        select:focus {
+
+            border-color:
+                var(--gold);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(214,168,79,0.05);
+        }
+
+
+        select:disabled {
+
+            opacity:
+                0.45;
+
+            cursor:
+                not-allowed;
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap:
+                15px;
+
+            margin-bottom:
+                25px;
+        }
+
+
+        .stat {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #151515,
+                    #0d0d0d
+                );
+
+            border:
+                1px solid
+                var(--border-light);
+
+            border-radius:
+                19px;
+
+            padding:
+                23px;
+
+            transition:
+                0.25s;
+        }
+
+
+        .stat::after {
+
+            content: "";
+
+            position:
+                absolute;
+
+            width:
+                70px;
+
+            height:
+                70px;
+
+            border-radius:
+                50%;
+
+            right:
+                -30px;
+
+            bottom:
+                -30px;
+
+            border:
+                1px solid
+                var(--border);
+        }
+
+
+        .stat:hover {
+
+            border-color:
+                var(--border);
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                var(--gold-shadow);
+        }
+
+
+        .stat-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                1.5px;
+
+            font-weight:
+                bold;
+        }
+
+
+        .stat-value {
+
+            color:
+                var(--gold-light);
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size:
+                34px;
+
+            font-weight:
+                bold;
+
+            margin-top:
+                12px;
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                0.9fr
+                1.5fr;
+
+            gap:
+                20px;
+        }
+
+
+        .card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #151515,
+                    #0c0c0c
+                );
+
+            border:
+                1px solid
+                var(--border-light);
+
+            border-radius:
+                24px;
+
+            padding:
+                25px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.25);
+        }
+
+
+        .card-title {
+
+            color:
+                var(--white);
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size:
+                21px;
+
+            font-weight:
+                bold;
+
+            margin-bottom:
+                20px;
+        }
+
+
+        .card-title::before {
+
+            content: "";
+
+            display:
+                inline-block;
+
+            width:
+                20px;
+
+            height:
+                1px;
+
+            background:
+                var(--gold);
+
+            margin:
+                0 9px 5px 0;
+        }
+
+
+        /* =====================================================
+           CURRENT TOKEN
+        ===================================================== */
+
+        .current {
+
+            text-align:
+                center;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(214,168,79,0.10),
+                    transparent 65%
+                ),
+                #0f0f0f;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius:
+                20px;
+
+            padding:
+                30px 20px;
+        }
+
+
+        .current-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                2px;
+        }
+
+
+        .current-token {
+
+            color:
+                var(--gold-light);
+
+            font-family:
+                Georgia,
+                serif;
+
+            font-size:
+                72px;
+
+            font-weight:
+                bold;
+
+            margin:
+                14px 0;
+        }
+
+
+        .status {
+
+            display:
+                inline-block;
+
+            padding:
+                8px 17px;
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(85,230,165,0.08);
+
+            border:
+                1px solid
+                rgba(85,230,165,0.25);
+
+            color:
+                var(--green);
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
+        .actions {
+
+            display:
+                grid;
+
+            gap:
+                11px;
+
+            margin-top:
+                18px;
+        }
+
+
+        button {
+
+            border:
+                none;
+
+            border-radius:
+                11px;
+
+            padding:
+                15px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.25s;
+        }
+
+
+        .call {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--gold-light),
+                    var(--gold)
+                );
+
+            color:
+                #090909;
+
+            box-shadow:
+                0 10px 25px
+                rgba(214,168,79,0.13);
+        }
+
+
+        .call:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(214,168,79,0.22);
+        }
+
+
+        .serve {
+
+            background:
+                transparent;
+
+            color:
+                var(--gold-light);
+
+            border:
+                1px solid
+                var(--border);
+        }
+
+
+        .serve:hover {
+
+            background:
+                rgba(214,168,79,0.07);
+
+            border-color:
+                var(--gold);
+        }
+
+
+        /* =====================================================
+           QUEUE
+        ===================================================== */
+
+        .queue-list {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                10px;
+
+            max-height:
+                410px;
+
+            overflow-y:
+                auto;
+
+            padding-right:
+                4px;
+        }
+
+
+        .queue-item {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            background:
+                #111;
+
+            border:
+                1px solid
+                var(--border-light);
+
+            border-radius:
+                13px;
+
+            padding:
+                15px;
+
+            transition:
+                0.25s;
+        }
+
+
+        .queue-item:hover {
+
+            border-color:
+                var(--border);
+
+            background:
+                #15130e;
+        }
+
+
+        .token {
+
+            color:
+                var(--gold-light);
+
+            font-size:
+                14px;
+
+            font-weight:
+                bold;
+        }
+
+
+        .customer {
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            margin-top:
+                6px;
+
+            line-height:
+                1.6;
+        }
+
+
+        .organization-small {
+
+            color:
+                var(--gold);
+
+            font-size:
+                10px;
+
+            margin-top:
+                5px;
+        }
+
+
+        .service-small {
+
+            color:
+                #777;
+
+            font-size:
+                10px;
+
+            margin-top:
+                2px;
+        }
+
+
+        .waiting {
+
+            color:
+                var(--green);
+
+            background:
+                rgba(85,230,165,0.07);
+
+            border:
+                1px solid
+                rgba(85,230,165,0.18);
+
+            padding:
+                6px 11px;
+
+            border-radius:
+                15px;
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                1px;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .empty {
+
+            text-align:
+                center;
+
+            color:
+                var(--muted);
+
+            padding:
+                45px 20px;
+
+            border:
+                1px dashed
+                var(--border-light);
+
+            border-radius:
+                14px;
+
+            font-size:
+                12px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align:
+                center;
+
+            color:
+                #555;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                0.5px;
+
+            margin-top:
+                30px;
+
+            padding-top:
+                20px;
+
+            border-top:
+                1px solid
+                var(--border-light);
+        }
+
+
+        .footer span {
+
+            color:
+                var(--gold-dark);
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .selectors {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+
+            .dashboard {
+
+                width:
+                    94%;
+
+                padding-top:
+                    20px;
+            }
+
+
+            .header {
+
+                align-items:
+                    flex-start;
+
+                gap:
+                    18px;
+
+                flex-direction:
+                    column;
+
+                margin-bottom:
+                    40px;
+            }
+
+
+            .admin-badge {
+
+                font-size:
+                    8px;
+            }
+
+
+            .welcome h1 {
+
+                font-size:
+                    38px;
+            }
+
+
+            .stats {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap:
+                    10px;
+            }
+
+
+            .stat {
+
+                padding:
+                    17px;
+            }
+
+
+            .stat-value {
+
+                font-size:
+                    28px;
+            }
+
+
+            .organization {
+
+                padding:
+                    20px;
+            }
+
+
+            .organization-top {
+
+                align-items:
+                    flex-start;
+
+                gap:
+                    15px;
+
+                flex-direction:
+                    column;
+            }
+
+
+            .current-token {
+
+                font-size:
+                    58px;
+            }
+
+
+            .queue-item {
+
+                align-items:
+                    flex-start;
+
+                gap:
+                    12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <div class="header">
+
+
+        <div class="logo-area">
+
+
+            <div class="logo-icon">
+
+                <span>Q</span>
+
+            </div>
+
+
+            <div>
+
+                <div class="logo">
+
+                    Queue<span>Ease</span>
+
+                </div>
+
+
+                <div class="logo-subtitle">
+
+                    SMART QUEUE MANAGEMENT
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="admin-badge">
+
+            ADMIN CONTROL CENTER
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         TITLE
+    ===================================================== -->
+
+    <div class="welcome">
+
+        <div class="welcome-kicker">
+
+            QUEUE MANAGEMENT
+
+        </div>
+
+
+        <h1>
+
+            Control your
+            <span>queue.</span>
+
+        </h1>
+
+
+        <p>
+
+            Monitor and control your queue in real time.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ORGANIZATION
+    ===================================================== -->
+
+    <div class="organization">
+
+
+        <div class="organization-top">
+
+
+            <div>
+
+                <div class="org-kicker">
+
+                    CURRENT ORGANIZATION
+
+                </div>
+
+
+                <div
+                    class="org-name"
+                    id="organizationName">
+
+                    Select Organization
+
+                </div>
+
+
+                <div
+                    class="service"
+                    id="serviceName">
+
+                    Select Service
+
+                </div>
+
+            </div>
+
+
+            <div class="live">
+
+                ● LIVE
+
+            </div>
+
+
+        </div>
+
+
+        <!-- SELECTORS -->
+
+        <div class="selectors">
+
+
+            <div class="selector-group">
+
+                <label>
+
+                    ORGANIZATION
+
+                </label>
+
+
+                <select
+                    id="organizationSelect"
+                    onchange="organizationChanged()">
+
+                    <option value="">
+
+                        Select Organization
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="selector-group">
+
+                <label>
+
+                    SERVICE
+
+                </label>
+
+
+                <select
+                    id="serviceSelect"
+                    onchange="serviceChanged()"
+                    disabled>
+
+                    <option value="">
+
+                        Select Service
+
+                    </option>
+
+                </select>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ===================================================== -->
+
+    <div class="stats">
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+
+                TOTAL TOKENS
+
+            </div>
+
+
+            <div
+                class="stat-value"
+                id="totalTokens">
+
+                --
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+
+                WAITING
+
+            </div>
+
+
+            <div
+                class="stat-value"
+                id="waitingTokens">
+
+                --
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+
+                SERVED
+
+            </div>
+
+
+            <div class="stat-value"
+                 id="servedTokens">
+
+                --
+
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+
+                NEXT TOKEN
+
+            </div>
+
+
+            <div
+                class="stat-value"
+                id="nextToken">
+
+                --
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ===================================================== -->
+
+    <div class="grid">
+
+
+        <!-- =================================================
+             QUEUE CONTROL
+        ================================================= -->
+
+        <div class="card">
+
+
+            <div class="card-title">
+
+                Queue Control
+
+            </div>
+
+
+            <div class="current">
+
+
+                <div class="current-label">
+
+                    CURRENTLY SERVING
+
+                </div>
+
+
+                <div
+                    class="current-token"
+                    id="currentToken">
+
+                    #--
+
+                </div>
+
+
+                <div
+                    class="status"
+                    id="currentStatus">
+
+                    READY
+
+                </div>
+
+
+            </div>
+
+
+            <div class="actions">
+
+
+                <button
+                    class="call"
+                    onclick="callNextToken()">
+
+                    🔔 CALL NEXT CUSTOMER
+
+                </button>
+
+
+                <button
+                    class="serve"
+                    onclick="serveCurrentToken()">
+
+                    ✓ SERVE CURRENT TOKEN
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             WAITING QUEUE
+        ================================================= -->
+
+        <div class="card">
+
+
+            <div class="card-title">
+
+                Customers Waiting
+
+            </div>
+
+
+            <div
+                class="queue-list"
+                id="queueList">
+
+                <div class="empty">
+
+                    Select an organization and service.
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+    <div class="footer">
+
+        QueueEase
+        <span>•</span>
+        One Queue System for Society
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     
+     KEEP YOUR EXISTING JAVASCRIPT HERE UNCHANGED.
+========================================================= -->
+
+
+<script>
+
+
+    /* =====================================================
+       GLOBAL STATE
+       ===================================================== */
+
+
+    let organizations = [];
+
+    let currentServices = [];
+
+    let currentToken = null;
+
+    let selectedOrganizationId = null;
+
+    let selectedServiceId = null;
+
+
+    /* =====================================================
+       LOAD ORGANIZATIONS
+       ===================================================== */
+
+    async function loadOrganizations() {
+
+        try {
+
+            const response =
+                await fetch("/organizations");
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Organizations loading failed"
+                );
+
+            }
+
+
+            organizations =
+                await response.json();
+
+
+            const select =
+                document.getElementById(
+                    "organizationSelect"
+                );
+
+
+            select.innerHTML =
+                '<option value="">Select Organization</option>';
+
+
+            organizations.forEach(
+                organization => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        organization.organizationId;
+
+
+                    option.textContent =
+                        organization.organizationName;
+
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Unable to load organizations."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ORGANIZATION CHANGED
+       ===================================================== */
+
+    async function organizationChanged() {
+
+        const select =
+            document.getElementById(
+                "organizationSelect"
+            );
+
+
+        selectedOrganizationId =
+            Number(select.value);
+
+
+        const serviceSelect =
+            document.getElementById(
+                "serviceSelect"
+            );
+
+
+        serviceSelect.innerHTML =
+            '<option value="">Select Service</option>';
+
+
+        serviceSelect.disabled =
+            true;
+
+
+        selectedServiceId =
+            null;
+
+
+        currentServices =
+            [];
+
+
+        currentToken =
+            null;
+
+
+        resetDashboard();
+
+
+        if (!selectedOrganizationId) {
+
+            document.getElementById(
+                "organizationName"
+            ).textContent =
+                "Select Organization";
+
+
+            document.getElementById(
+                "serviceName"
+            ).textContent =
+                "Select Service";
+
+
+            return;
+
+        }
+
+
+        const organization =
+            organizations.find(
+                item =>
+                    Number(
+                        item.organizationId
+                    ) ===
+                    selectedOrganizationId
+            );
+
+
+        if (organization) {
+
+            document.getElementById(
+                "organizationName"
+            ).textContent =
+                organization.organizationName;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/services/" +
+                    selectedOrganizationId
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Services loading failed"
+                );
+
+            }
+
+
+            currentServices =
+                await response.json();
+
+
+            currentServices.forEach(
+                service => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        service.serviceId;
+
+
+                    option.textContent =
+                        service.serviceName +
+                        " (" +
+                        service.estimatedServiceTime +
+                        " min)";
+
+
+                    serviceSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            serviceSelect.disabled =
+                false;
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Unable to load services."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SERVICE CHANGED
+       ===================================================== */
+
+    function serviceChanged() {
+
+        const select =
+            document.getElementById(
+                "serviceSelect"
+            );
+
+
+        selectedServiceId =
+            Number(select.value);
+
+
+        currentToken =
+            null;
+
+
+        document.getElementById(
+            "currentToken"
+        ).textContent =
+            "#--";
+
+
+        document.getElementById(
+            "currentStatus"
+        ).textContent =
+            "READY";
+
+
+        if (!selectedServiceId) {
+
+            document.getElementById(
+                "serviceName"
+            ).textContent =
+                "Select Service";
+
+
+            resetDashboard();
+
+            return;
+
+        }
+
+
+        const service =
+            currentServices.find(
+                item =>
+                    Number(
+                        item.serviceId
+                    ) ===
+                    selectedServiceId
+            );
+
+
+        if (service) {
+
+            document.getElementById(
+                "serviceName"
+            ).textContent =
+                service.serviceName;
+
+        }
+
+
+        loadQueue();
+
+    }
+
+
+    /* =====================================================
+       LOAD SELECTED QUEUE
+       ===================================================== */
+
+    async function loadQueue() {
+
+        if (
+            !selectedOrganizationId ||
+            !selectedServiceId
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/queue/filter" +
+                    "?organizationId=" +
+                    selectedOrganizationId +
+                    "&serviceId=" +
+                    selectedServiceId
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Queue loading failed"
+                );
+
+            }
+
+
+            const tokens =
+                await response.json();
+
+
+            console.log(
+                "Selected queue:",
+                tokens
+            );
+
+
+            /* TOTAL */
+
+            document.getElementById(
+                "totalTokens"
+            ).textContent =
+                tokens.length;
+
+
+            /* WAITING */
+
+            const waiting =
+                tokens.filter(
+                    token =>
+                        token.status ===
+                        "WAITING"
+                );
+
+
+            document.getElementById(
+                "waitingTokens"
+            ).textContent =
+                waiting.length;
+
+
+            /* SERVED */
+
+            const served =
+                tokens.filter(
+                    token =>
+                        token.status ===
+                        "SERVED"
+                );
+
+
+            document.getElementById(
+                "servedTokens"
+            ).textContent =
+                served.length;
+
+
+            /* NEXT */
+
+            if (
+                waiting.length > 0
+            ) {
+
+                document.getElementById(
+                    "nextToken"
+                ).textContent =
+                    "#" +
+                    waiting[0].tokenNumber;
+
+            } else {
+
+                document.getElementById(
+                    "nextToken"
+                ).textContent =
+                    "--";
+
+            }
+
+
+            /* CALLED TOKEN */
+
+            const called =
+                tokens.find(
+                    token =>
+                        token.status ===
+                        "CALLED"
+                );
+
+
+            if (called) {
+
+                currentToken =
+                    called;
+
+
+                document.getElementById(
+                    "currentToken"
+                ).textContent =
+                    "#" +
+                    called.tokenNumber;
+
+
+                document.getElementById(
+                    "currentStatus"
+                ).textContent =
+                    "🔔 CALLED";
+
+            }
+
+
+            renderQueue(
+                waiting
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            document.getElementById(
+                "queueList"
+            ).innerHTML =
+                '<div class="empty">' +
+                'Unable to load queue' +
+                '</div>';
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RENDER QUEUE
+       ===================================================== */
+
+    function renderQueue(
+        waiting
+    ) {
+
+        const list =
+            document.getElementById(
+                "queueList"
+            );
+
+
+        if (
+            waiting.length === 0
+        ) {
+
+            list.innerHTML =
+                '<div class="empty">' +
+                'No customers waiting 🎉' +
+                '</div>';
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            "";
+
+
+        waiting.forEach(
+            token => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "queue-item";
+
+
+                item.innerHTML = `
+
+                    <div>
+
+                        <div class="token">
+
+                            Token #${token.tokenNumber}
+
+                        </div>
+
+
+                        <div class="customer">
+
+                            ${escapeHtml(
+                                token.customerName ||
+                                "Customer"
+                            )}
+
+                            • Position
+                            ${token.queuePosition}
+
+                            •
+                            ${token.estimatedWaitingTime}
+                            min
+
+                        </div>
+
+
+                        <div class="organization-small">
+
+                            ${escapeHtml(
+                                getOrganizationName(
+                                    token.organizationId
+                                )
+                            )}
+
+                        </div>
+
+
+                        <div class="service-small">
+
+                            ${escapeHtml(
+                                getServiceName(
+                                    token.serviceId
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="waiting">
+
+                        WAITING
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       GET ORGANIZATION NAME
+       ===================================================== */
+
+    function getOrganizationName(
+        organizationId
+    ) {
+
+        const organization =
+            organizations.find(
+                item =>
+                    Number(
+                        item.organizationId
+                    ) ===
+                    Number(
+                        organizationId
+                    )
+            );
+
+
+        return organization
+            ? organization.organizationName
+            : "Organization";
+
+    }
+
+
+    /* =====================================================
+       GET SERVICE NAME
+       ===================================================== */
+
+    function getServiceName(
+        serviceId
+    ) {
+
+        const service =
+            currentServices.find(
+                item =>
+                    Number(
+                        item.serviceId
+                    ) ===
+                    Number(
+                        serviceId
+                    )
+            );
+
+
+        return service
+            ? service.serviceName
+            : "Service";
+
+    }
+
+
+    /* =====================================================
+       CALL NEXT
+       ===================================================== */
+
+    async function callNextToken() {
+
+        if (
+            !selectedOrganizationId ||
+            !selectedServiceId
+        ) {
+
+            alert(
+                "Please select an organization and service first."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/queue/call-next" +
+                    "?organizationId=" +
+                    selectedOrganizationId +
+                    "&serviceId=" +
+                    selectedServiceId
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Call next failed"
+                );
+
+            }
+
+
+            const token =
+                await response.json();
+
+
+            if (!token) {
+
+                alert(
+                    "No waiting customers in this queue."
+                );
+
+                return;
+
+            }
+
+
+            currentToken =
+                token;
+
+
+            document.getElementById(
+                "currentToken"
+            ).textContent =
+                "#" +
+                token.tokenNumber;
+
+
+            document.getElementById(
+                "currentStatus"
+            ).textContent =
+                "🔔 CALLED";
+
+
+            playBuzzer();
+
+
+            await loadQueue();
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Unable to call next customer."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SERVE CURRENT
+       ===================================================== */
+
+    async function serveCurrentToken() {
+
+        if (!currentToken) {
+
+            alert(
+                "No customer is currently being served."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/queue/serve/" +
+                    currentToken.tokenNumber
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Serve failed"
+                );
+
+            }
+
+
+            alert(
+                "Token #" +
+                currentToken.tokenNumber +
+                " has been served."
+            );
+
+
+            currentToken =
+                null;
+
+
+            document.getElementById(
+                "currentToken"
+            ).textContent =
+                "#--";
+
+
+            document.getElementById(
+                "currentStatus"
+            ).textContent =
+                "READY";
+
+
+            await loadQueue();
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Unable to serve token."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESET DASHBOARD
+       ===================================================== */
+
+    function resetDashboard() {
+
+        document.getElementById(
+            "totalTokens"
+        ).textContent =
+            "--";
+
+
+        document.getElementById(
+            "waitingTokens"
+        ).textContent =
+            "--";
+
+
+        document.getElementById(
+            "servedTokens"
+        ).textContent =
+            "--";
+
+
+        document.getElementById(
+            "nextToken"
+        ).textContent =
+            "--";
+
+
+        document.getElementById(
+            "currentToken"
+        ).textContent =
+            "#--";
+
+
+        document.getElementById(
+            "currentStatus"
+        ).textContent =
+            "READY";
+
+
+        document.getElementById(
+            "queueList"
+        ).innerHTML =
+            '<div class="empty">' +
+            'Select a service to view the queue.' +
+            '</div>';
+
+    }
+
+
+    /* =====================================================
+       SAFE HTML
+       ===================================================== */
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =====================================================
+       BUZZER
+       ===================================================== */
+
+    function playBuzzer() {
+
+        try {
+
+            const AudioContext =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+
+            const audio =
+                new AudioContext();
+
+
+            const oscillator =
+                audio.createOscillator();
+
+
+            const gain =
+                audio.createGain();
+
+
+            oscillator.connect(
+                gain
+            );
+
+
+            gain.connect(
+                audio.destination
+            );
+
+
+            oscillator.frequency.value =
+                800;
+
+
+            gain.gain.value =
+                0.3;
+
+
+            oscillator.start();
+
+
+            setTimeout(
+                () => {
+
+                    oscillator.frequency.value =
+                        600;
+
+                },
+                150
+            );
+
+
+            setTimeout(
+                () => {
+
+                    oscillator.frequency.value =
+                        900;
+
+                },
+                300
+            );
+
+
+            setTimeout(
+                () => {
+
+                    gain.gain.exponentialRampToValueAtTime(
+                        0.01,
+                        audio.currentTime + 0.2
+                    );
+
+
+                    oscillator.stop(
+                        audio.currentTime + 0.2
+                    );
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            console.log(
+                "Buzzer unavailable"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       INITIALIZATION
+       ===================================================== */
+
+    async function initializeDashboard() {
+
+        resetDashboard();
+
+        await loadOrganizations();
+
+    }
+
+
+    initializeDashboard();
+
+
+    /* =====================================================
+       LIVE REFRESH
+       ===================================================== */
+
+    setInterval(
+        () => {
+
+            if (
+                selectedOrganizationId &&
+                selectedServiceId
+            ) {
+
+                loadQueue();
+
+            }
+
+        },
+        5000
+    );
+
+</script>
+
+
+</body>
+
+</html>

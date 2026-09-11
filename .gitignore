@@ -1,0 +1,19 @@
+# Java / Maven
+**/target/
+**/.classpath
+**/.project
+**/.settings/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+# Local database configuration
+**/src/main/resources/application.properties
+**/build-error.txt

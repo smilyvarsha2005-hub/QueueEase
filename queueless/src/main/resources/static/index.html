@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QueueEase</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+<header class="topbar">
+
+    <div class="brand" onclick="showSection('home')">
+        <div class="brand-icon">Q</div>
+
+        <div class="brand-text">
+            <span class="brand-name">Queue<span>Ease</span></span>
+            <small>SMART QUEUE MANAGEMENT</small>
+        </div>
+    </div>
+
+    <div class="header-actions">
+
+        <button class="icon-btn" onclick="showSection('discover')" title="Search">
+            ⌕
+        </button>
+
+        <button class="icon-btn" onclick="showSection('queue')" title="My Queue">
+            ◷
+        </button>
+
+        <button class="profile-btn" onclick="showSection('profile')">
+            <span>V</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+<main>
+
+<!-- =====================================================
+     HOME SECTION
+===================================================== -->
+<section id="homeSection" class="section active">
+
+    <div class="hero-section">
+
+        <div class="hero-content">
+
+            <p class="eyebrow">
+                <span class="gold-line"></span>
+                SMART QUEUE MANAGEMENT
+            </p>
+
+            <h1>
+                Your time is<br>
+                <span>precious.</span>
+            </h1>
+
+            <p class="hero-description">
+                Skip the waiting. Join queues remotely,
+                track your position and get notified when
+                it's your turn.
+            </p>
+
+            <button
+                class="primary-button hero-button"
+                onclick="showSection('discover')"
+            >
+                FIND A SERVICE
+                <span>→</span>
+            </button>
+
+        </div>
+
+        <div class="hero-decoration">
+
+            <div class="gold-circle circle-one"></div>
+            <div class="gold-circle circle-two"></div>
+
+            <div class="queue-card-preview">
+
+                <div class="preview-top">
+                    <span>LIVE QUEUE</span>
+                    <span class="live-dot"></span>
+                </div>
+
+                <div class="preview-token">
+                    <small>YOUR TOKEN</small>
+                    <strong>Q26</strong>
+                </div>
+
+                <div class="preview-bottom">
+                    <span>POSITION</span>
+                    <strong>#7</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVE TICKET -->
+    <div id="activeTicket" class="active-ticket hidden">
+
+        <div class="ticket-top">
+            <div>
+                <span class="ticket-label">ACTIVE QUEUE</span>
+                <h3 id="activeOrganization">
+                    QueueEase
+                </h3>
+            </div>
+
+            <span class="live-dot"></span>
+        </div>
+
+        <div class="ticket-main">
+
+            <div class="ticket-number">
+                <small>TOKEN</small>
+                <strong id="activeTokenNumber">--</strong>
+            </div>
+
+            <div class="ticket-info">
+
+                <div>
+                    <span>POSITION</span>
+                    <strong id="activePosition">--</strong>
+                </div>
+
+                <div>
+                    <span>WAIT TIME</span>
+                    <strong id="activeWait">-- min</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+        <button
+            class="light-button"
+            onclick="showSection('queue')"
+        >
+            VIEW QUEUE →
+        </button>
+
+    </div>
+
+
+    <!-- CATEGORIES -->
+    <div class="section-block">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-kicker">EXPLORE</span>
+                <h2>Choose a category</h2>
+            </div>
+
+            <button
+                class="text-button"
+                onclick="showSection('discover')"
+            >
+                View all →
+            </button>
+
+        </div>
+
+        <div
+            id="categoryGrid"
+            class="category-grid"
+        ></div>
+
+    </div>
+
+
+    <!-- ORGANIZATIONS -->
+    <div class="section-block">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-kicker">NEAR YOU</span>
+                <h2>Popular services</h2>
+            </div>
+
+        </div>
+
+        <div
+            id="organizationList"
+            class="organization-list"
+        >
+
+            <!-- JS will populate this -->
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DISCOVER SECTION
+===================================================== -->
+<section id="discoverSection" class="section">
+
+    <div class="page-header">
+
+        <span class="section-kicker">DISCOVER</span>
+
+        <h1>Find your service</h1>
+
+        <p>
+            Search organizations and join a queue
+            before you arrive.
+        </p>
+
+    </div>
+
+
+    <div class="search-box large-search">
+
+        <span>⌕</span>
+
+        <input
+            type="text"
+            id="discoverSearch"
+            placeholder="Search hospitals, banks, salons..."
+            oninput="filterOrganizations(this.value)"
+        >
+
+    </div>
+
+
+    <div class="discover-layout">
+
+        <aside class="discover-sidebar">
+
+            <span class="section-kicker">
+                CATEGORIES
+            </span>
+
+            <div
+                id="discoverCategories"
+                class="category-grid discover-category-grid"
+            ></div>
+
+        </aside>
+
+
+        <div class="discover-results">
+
+            <div class="results-heading">
+
+                <div>
+                    <span class="section-kicker">
+                        AVAILABLE
+                    </span>
+
+                    <h2>Organizations</h2>
+                </div>
+
+                <span class="result-count">
+                    Nearby
+                </span>
+
+            </div>
+
+
+            <div
+                id="discoverList"
+                class="organization-list"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="map-wrapper">
+
+        <div class="map-heading">
+
+            <div>
+                <span class="section-kicker">
+                    LOCATION
+                </span>
+
+                <h2>Nearby organizations</h2>
+            </div>
+
+        </div>
+
+        <div
+            id="queueEaseMap"
+            class="map-container"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUEUE SECTION
+===================================================== -->
+<section id="queueSection" class="section">
+
+    <div class="page-header queue-page-header">
+
+        <span class="section-kicker">
+            MY QUEUE
+        </span>
+
+        <h1>Your place in line</h1>
+
+        <p>
+            Track your queue in real time.
+        </p>
+
+    </div>
+
+
+    <div
+        id="queueTicket"
+        class="large-ticket"
+    >
+
+        <div class="ticket-header">
+
+            <div>
+                <span class="ticket-label">
+                    CURRENT TOKEN
+                </span>
+
+                <div
+                    id="queueToken"
+                    class="big-token"
+                >
+                    --
+                </div>
+            </div>
+
+            <div
+                id="ticketStatus"
+                class="ticket-status"
+            >
+                WAITING
+            </div>
+
+        </div>
+
+
+        <div class="queue-stats">
+
+            <div class="queue-stat">
+
+                <span>POSITION</span>
+
+                <strong id="queuePosition">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="queue-stat">
+
+                <span>EST. WAIT</span>
+
+                <strong>
+                    <span id="queueWait">--</span>
+                    <small>min</small>
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="progress-area">
+
+            <div class="progress-label">
+
+                <span>PEOPLE AHEAD</span>
+
+                <strong id="peopleAhead">
+                    --
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div
+                    id="queueProgress"
+                    class="progress"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="queueNotification"
+        class="notification-box"
+    >
+        <div class="notification-icon">
+            ✓
+        </div>
+
+        <div>
+            <strong>Notifications enabled</strong>
+
+            <p>
+                We'll notify you when your turn is near.
+            </p>
+        </div>
+    </div>
+
+
+    <button
+        class="primary-button full-button"
+        onclick="refreshQueue()"
+    >
+        REFRESH QUEUE
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     PROFILE SECTION
+===================================================== -->
+<section id="profileSection" class="section">
+
+    <div class="page-header">
+
+        <span class="section-kicker">
+            ACCOUNT
+        </span>
+
+        <h1>Your profile</h1>
+
+    </div>
+
+
+    <div class="profile-card">
+
+        <div class="profile-avatar">
+            V
+        </div>
+
+        <div>
+
+            <span class="section-kicker">
+                MEMBER
+            </span>
+
+            <h2>QueueEase User</h2>
+
+            <p>
+                Manage your queue preferences
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-list">
+
+        <div class="setting-item">
+
+            <div class="setting-icon">
+                ◷
+            </div>
+
+            <div>
+                <strong>My Queue</strong>
+                <span>View your active queue</span>
+            </div>
+
+            <button onclick="showSection('queue')">
+                →
+            </button>
+
+        </div>
+
+
+        <div class="setting-item">
+
+            <div class="setting-icon">
+                ◉
+            </div>
+
+            <div>
+                <strong>Discover</strong>
+                <span>Find nearby organizations</span>
+            </div>
+
+            <button onclick="showSection('discover')">
+                →
+            </button>
+
+        </div>
+
+
+        <div class="setting-item">
+
+            <div class="setting-icon">
+                ?
+            </div>
+
+            <div>
+                <strong>About QueueEase</strong>
+                <span>Smart queue management</span>
+            </div>
+
+            <button>
+                →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     ORGANIZATION MODAL
+===================================================== -->
+<div
+    id="organizationModal"
+    class="modal"
+>
+
+    <div class="modal-overlay" onclick="closeModal('organizationModal')"></div>
+
+    <div class="modal-content">
+
+        <button
+            class="close-button"
+            onclick="closeModal('organizationModal')"
+        >
+            ×
+        </button>
+
+
+        <div class="modal-icon">
+            Q
+        </div>
+
+
+        <span class="section-kicker">
+            ORGANIZATION
+        </span>
+
+        <h2 id="organizationName">
+            Organization
+        </h2>
+
+        <p
+            id="organizationAddress"
+            class="modal-address"
+        >
+            Address
+        </p>
+
+
+        <div class="modal-divider"></div>
+
+
+        <div class="modal-section">
+
+            <span class="section-kicker">
+                SELECT SERVICE
+            </span>
+
+            <div
+                id="serviceList"
+                class="service-list"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JOIN QUEUE MODAL
+===================================================== -->
+<div
+    id="joinModal"
+    class="modal"
+>
+
+    <div class="modal-overlay" onclick="closeModal('joinModal')"></div>
+
+    <div class="modal-content join-modal">
+
+        <button
+            class="close-button"
+            onclick="closeModal('joinModal')"
+        >
+            ×
+        </button>
+
+
+        <div class="modal-icon">
+            →
+        </div>
+
+
+        <span class="section-kicker">
+            JOIN QUEUE
+        </span>
+
+        <h2>Enter your details</h2>
+
+        <p class="modal-description">
+            You'll receive a token immediately.
+        </p>
+
+
+        <div class="selected-service-box">
+
+            <span>SERVICE</span>
+
+            <strong id="selectedService">
+                General Consultation
+            </strong>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="customerName">
+                YOUR NAME
+            </label>
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your name"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="contact">
+                CONTACT
+            </label>
+
+            <input
+                type="text"
+                id="contact"
+                placeholder="Email or phone number"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                NOTIFY ME VIA
+            </label>
+
+            <div class="notification-options">
+
+                <button
+                    class="notification-option selected"
+                    onclick="selectNotification('EMAIL')"
+                    data-notification="EMAIL"
+                >
+                    <span>✉</span>
+                    EMAIL
+                </button>
+
+                <button
+                    class="notification-option"
+                    onclick="selectNotification('SMS')"
+                    data-notification="SMS"
+                >
+                    <span>▣</span>
+                    SMS
+                </button>
+
+                <button
+                    class="notification-option"
+                    onclick="selectNotification('CALL')"
+                    data-notification="CALL"
+                >
+                    <span>☎</span>
+                    CALL
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="primary-button full-button"
+            onclick="joinQueue()"
+        >
+            JOIN QUEUE →
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOKEN MODAL
+===================================================== -->
+<div
+    id="tokenModal"
+    class="modal"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content token-modal">
+
+        <button
+            class="close-button"
+            onclick="closeModal('tokenModal')"
+        >
+            ×
+        </button>
+
+
+        <span class="section-kicker">
+            YOU'RE IN
+        </span>
+
+        <h2>Your queue token</h2>
+
+
+        <div class="token-display">
+
+            <span class="token-label">
+                TOKEN NUMBER
+            </span>
+
+            <strong id="tokenNumber">
+                --
+            </strong>
+
+        </div>
+
+
+        <div class="token-info">
+
+            <div>
+                <span>POSITION</span>
+                <strong id="tokenPosition">--</strong>
+            </div>
+
+            <div>
+                <span>WAIT TIME</span>
+                <strong id="tokenWait">--</strong>
+            </div>
+
+        </div>
+
+
+        <div class="qr-card">
+
+            <div
+                id="qrCode"
+                class="qr-placeholder"
+            ></div>
+
+            <p class="qr-title">
+                SCAN TO TRACK YOUR QUEUE
+            </p>
+
+        </div>
+
+
+        <div
+            id="notificationMessage"
+            class="success-message"
+        >
+            ✓ You have successfully joined the queue.
+        </div>
+
+
+        <button
+            class="primary-button full-button"
+            onclick="showSection('queue'); closeModal('tokenModal')"
+        >
+            VIEW MY QUEUE
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCANNER MODAL
+===================================================== -->
+<div
+    id="scannerModal"
+    class="modal"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content scanner-content">
+
+        <button
+            class="close-button"
+            onclick="closeModal('scannerModal')"
+        >
+            ×
+        </button>
+
+
+        <span class="section-kicker">
+            SCAN
+        </span>
+
+        <h2>Scan Queue QR</h2>
+
+        <div class="scanner-box">
+
+            <video
+                id="scannerVideo"
+                autoplay
+                playsinline
+            ></video>
+
+            <div class="scanner-frame"></div>
+
+        </div>
+
+
+        <p
+            id="scannerMessage"
+            class="scanner-message"
+        >
+            Position the QR code inside the frame.
+        </p>
+
+
+        <button
+            class="secondary-button"
+            onclick="closeModal('scannerModal')"
+        >
+            CANCEL
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     BOTTOM NAVIGATION
+===================================================== -->
+<nav class="bottom-nav">
+
+    <button
+        class="nav-item active"
+        onclick="showSection('home')"
+    >
+        <span>⌂</span>
+        <small>HOME</small>
+    </button>
+
+
+    <button
+        class="nav-item"
+        onclick="showSection('discover')"
+    >
+        <span>⌕</span>
+        <small>DISCOVER</small>
+    </button>
+
+
+    <button
+        class="scan-button"
+        onclick="openScanner()"
+    >
+        <span>⌖</span>
+    </button>
+
+
+    <button
+        class="nav-item"
+        onclick="showSection('queue')"
+    >
+        <span>◷</span>
+        <small>MY QUEUE</small>
+    </button>
+
+
+    <button
+        class="nav-item"
+        onclick="showSection('profile')"
+    >
+        <span>○</span>
+        <small>PROFILE</small>
+    </button>
+
+</nav>
+
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+></script>
+
+<!-- DO NOT CHANGE THIS -->
+<script src="script.js"></script>
+
+</body>
+</html>

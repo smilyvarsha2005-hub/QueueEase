@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QueueEase Live Queue</title>
+
+    <style>
+        /* =========================================
+           QUEUEEASE BLACK + GOLD LUXURY THEME
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.13), transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.06), transparent 30%),
+                #050505;
+            color: #ffffff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =========================================
+           BACKGROUND GLOW
+        ========================================= */
+
+        body::before {
+            content: "";
+            position: fixed;
+
+            width: 350px;
+            height: 350px;
+
+            border-radius: 50%;
+
+            background: rgba(212, 175, 55, 0.08);
+
+            filter: blur(100px);
+
+            top: -150px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================
+           MAIN CARD
+        ========================================= */
+
+        .card {
+            position: relative;
+
+            width: 100%;
+            max-width: 470px;
+
+            padding: 38px 30px 30px;
+
+            text-align: center;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(25, 25, 25, 0.98),
+                    rgba(10, 10, 10, 0.98)
+                );
+
+            border: 1px solid rgba(212, 175, 55, 0.35);
+
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.75),
+                0 0 35px rgba(212, 175, 55, 0.06);
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================
+           GOLD TOP LINE
+        ========================================= */
+
+        .card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #d4af37,
+                    #f5d76e,
+                    #d4af37,
+                    transparent
+                );
+
+            box-shadow:
+                0 0 15px rgba(212, 175, 55, 0.7);
+        }
+
+
+        /* =========================================
+           BRAND
+        ========================================= */
+
+        .brand-area {
+            margin-bottom: 8px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 1px;
+
+            color: #d4af37;
+
+            text-shadow:
+                0 0 18px rgba(212, 175, 55, 0.25);
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+
+            color: #a6a6a6;
+
+            font-size: 13px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =========================================
+           LIVE INDICATOR
+        ========================================= */
+
+        .live-indicator {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 22px;
+            margin-bottom: 12px;
+
+            padding: 7px 14px;
+
+            border-radius: 30px;
+
+            background: rgba(212, 175, 55, 0.08);
+
+            border: 1px solid rgba(212, 175, 55, 0.25);
+
+            color: #d4af37;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #d4af37;
+
+            box-shadow:
+                0 0 8px rgba(212, 175, 55, 0.9);
+
+            animation: livePulse 1.5s infinite;
+        }
+
+        @keyframes livePulse {
+
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.75);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        /* =========================================
+           TOKEN AREA
+        ========================================= */
+
+        .token-section {
+            margin-top: 8px;
+
+            padding: 22px 15px 24px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(212, 175, 55, 0.07),
+                    rgba(255, 255, 255, 0.015)
+                );
+
+            border: 1px solid rgba(212, 175, 55, 0.18);
+        }
+
+        .token-label {
+            font-size: 11px;
+
+            color: #888888;
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 3px;
+        }
+
+        .token {
+            font-size: 72px;
+
+            line-height: 1;
+
+            font-weight: 900;
+
+            margin: 12px 0 18px;
+
+            color: #f5d76e;
+
+            letter-spacing: 2px;
+
+            text-shadow:
+                0 0 18px rgba(212, 175, 55, 0.25);
+        }
+
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-width: 130px;
+
+            padding: 9px 20px;
+
+            border-radius: 30px;
+
+            background: #24200f;
+
+            color: #d4af37;
+
+            border: 1px solid rgba(212, 175, 55, 0.28);
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            letter-spacing: 0.8px;
+
+            margin-bottom: 4px;
+        }
+
+
+        /* =========================================
+           INFORMATION GRID
+        ========================================= */
+
+        .info {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 14px;
+
+            margin-top: 20px;
+        }
+
+
+        /* =========================================
+           INFORMATION BOX
+        ========================================= */
+
+        .box {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #171717,
+                    #0e0e0e
+                );
+
+            padding: 20px 12px;
+
+            border-radius: 18px;
+
+            border: 1px solid #252525;
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-3px);
+
+            border-color: rgba(212, 175, 55, 0.4);
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+
+        /* Small gold line */
+
+        .box::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+
+            height: 2px;
+
+            background: #d4af37;
+
+            opacity: 0.45;
+
+            border-radius: 10px;
+        }
+
+
+        .label {
+            color: #8d8d8d;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.1px;
+        }
+
+        .value {
+            color: #ffffff;
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            margin-top: 10px;
+        }
+
+
+        /* =========================================
+           REFRESH MESSAGE
+        ========================================= */
+
+        .refresh {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 25px;
+
+            color: #777777;
+
+            font-size: 12px;
+
+            letter-spacing: 0.3px;
+        }
+
+        .refresh-icon {
+            color: #d4af37;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer {
+            margin-top: 18px;
+
+            padding-top: 16px;
+
+            border-top: 1px solid #202020;
+
+            color: #555555;
+
+            font-size: 10px;
+
+            letter-spacing: 1.2px;
+
+            text-transform: uppercase;
+        }
+
+        .footer span {
+            color: #8d7322;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 32px 20px 24px;
+
+                border-radius: 24px;
+            }
+
+            .logo {
+                font-size: 27px;
+            }
+
+            .subtitle {
+                font-size: 11px;
+            }
+
+            .token {
+                font-size: 62px;
+            }
+
+            .info {
+                gap: 10px;
+            }
+
+            .box {
+                padding: 17px 8px;
+            }
+
+            .value {
+                font-size: 22px;
+            }
+        }
+
+
+        /* =========================================
+           VERY SMALL SCREENS
+        ========================================= */
+
+        @media (max-width: 350px) {
+
+            .card {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .token {
+                font-size: 55px;
+            }
+
+            .value {
+                font-size: 20px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+
+    <!-- =====================================
+         BRAND
+    ====================================== -->
+
+    <div class="brand-area">
+
+        <div class="logo">
+            Queue<span>Ease</span>
+        </div>
+
+        <div class="subtitle">
+            Live Queue Status
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         LIVE INDICATOR
+    ====================================== -->
+
+    <div class="live-indicator">
+
+        <div class="live-dot"></div>
+
+        LIVE QUEUE
+
+    </div>
+
+
+    <!-- =====================================
+         TOKEN
+    ====================================== -->
+
+    <div class="token-section">
+
+        <div class="token-label">
+            Your Token
+        </div>
+
+        <div
+            class="token"
+            id="tokenNumber"
+        >
+            #--
+        </div>
+
+
+        <!-- =================================
+             STATUS
+        ================================== -->
+
+        <div
+            class="status"
+            id="status"
+        >
+            Loading...
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         QUEUE INFORMATION
+    ====================================== -->
+
+    <div class="info">
+
+
+        <div class="box">
+
+            <div class="label">
+                Queue Position
+            </div>
+
+            <div
+                class="value"
+                id="position"
+            >
+                --
+            </div>
+
+        </div>
+
+
+        <div class="box">
+
+            <div class="label">
+                Estimated Wait
+            </div>
+
+            <div
+                class="value"
+                id="wait"
+            >
+                --
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================
+         REFRESH
+    ====================================== -->
+
+    <div class="refresh">
+
+        <span class="refresh-icon">
+            ↻
+        </span>
+
+        Live queue updates automatically
+
+    </div>
+
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
+    <div class="footer">
+
+        Powered by
+        <span>QueueEase</span>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+/* ================================
+   TOKEN
+================================ */
+
+const params =
+    new URLSearchParams(window.location.search);
+
+const tokenNumber =
+    params.get("token");
+
+
+/* ================================
+   STATUS VARIABLES
+================================ */
+
+let previousStatus = null;
+let notificationShown = false;
+
+
+/* ================================
+   AUDIO VARIABLES
+================================ */
+
+let audioContext = null;
+let audioUnlocked = false;
+
+
+/* ================================
+   UNLOCK AUDIO
+================================ */
+
+function unlockAudio() {
+
+    if (audioUnlocked) {
+        return;
+    }
+
+    try {
+
+        audioContext =
+            new (window.AudioContext ||
+                 window.webkitAudioContext)();
+
+        if (audioContext.state === "suspended") {
+
+            audioContext.resume();
+
+        }
+
+        audioUnlocked = true;
+
+        console.log("🔊 Audio unlocked");
+
+    } catch (error) {
+
+        console.error(
+            "Audio unlock failed:",
+            error
+        );
+    }
+}
+
+
+/* ================================
+   BROWSER NOTIFICATION PERMISSION
+================================ */
+
+async function requestNotificationPermission() {
+
+    if ("Notification" in window) {
+
+        if (Notification.permission === "default") {
+
+            await Notification.requestPermission();
+
+        }
+
+    }
+}
+
+
+/* ================================
+   BUZZER
+================================ */
+
+function playBuzzer() {
+
+    try {
+
+        if (!audioContext) {
+
+            unlockAudio();
+
+        }
+
+        if (!audioContext) {
+
+            console.log(
+                "Audio context unavailable"
+            );
+
+            return;
+        }
+
+
+        if (audioContext.state === "suspended") {
+
+            audioContext.resume();
+
+        }
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gainNode =
+            audioContext.createGain();
+
+
+        oscillator.connect(gainNode);
+
+        gainNode.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.type = "sine";
+
+
+        oscillator.frequency.setValueAtTime(
+            800,
+            audioContext.currentTime
+        );
+
+
+        oscillator.frequency.setValueAtTime(
+            600,
+            audioContext.currentTime + 0.25
+        );
+
+
+        gainNode.gain.setValueAtTime(
+            0.4,
+            audioContext.currentTime
+        );
+
+
+        gainNode.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.8
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audioContext.currentTime + 0.8
+        );
+
+
+        console.log("🔔 Buzzer played");
+
+    } catch (error) {
+
+        console.error(
+            "Buzzer error:",
+            error
+        );
+    }
+}
+
+
+/* ================================
+   SHOW BROWSER NOTIFICATION
+================================ */
+
+function showTurnNotification(token) {
+
+    if (
+        "Notification" in window &&
+        Notification.permission === "granted"
+    ) {
+
+        new Notification(
+            "🔔 QueueEase",
+            {
+                body:
+                    "It's your turn! Token #" +
+                    token.tokenNumber +
+                    " is being called.",
+
+                icon: "/favicon.ico"
+            }
+        );
+
+    }
+}
+
+
+/* ================================
+   LIVE QUEUE
+================================ */
+
+async function loadQueue() {
+
+    if (!tokenNumber) {
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "Invalid Token";
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/queue/status/" +
+                Number(tokenNumber)
+            );
+
+
+        console.log(
+            "Token requested:",
+            tokenNumber
+        );
+
+
+        console.log(
+            "Response status:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP Error: " +
+                response.status
+            );
+
+        }
+
+
+        const text =
+            await response.text();
+
+
+        console.log(
+            "Server response:",
+            text
+        );
+
+
+        if (!text) {
+
+            throw new Error(
+                "Empty response from server"
+            );
+
+        }
+
+
+        const token =
+            JSON.parse(text);
+
+
+        /* ================================
+           TOKEN INFORMATION
+        ================================= */
+
+        document.getElementById(
+            "tokenNumber"
+        ).textContent =
+            "#" + token.tokenNumber;
+
+
+        document.getElementById(
+            "position"
+        ).textContent =
+            token.queuePosition;
+
+
+        document.getElementById(
+            "wait"
+        ).textContent =
+            token.estimatedWaitingTime +
+            " min";
+
+
+        /* ================================
+           STATUS
+        ================================= */
+
+        const statusElement =
+            document.getElementById(
+                "status"
+            );
+
+
+        /* ================================
+           CALLED
+        ================================= */
+
+        if (token.status === "CALLED") {
+
+            statusElement.textContent =
+                "🔔 YOUR TURN";
+
+
+            statusElement.style.background =
+                "#5b3b00";
+
+
+            statusElement.style.color =
+                "#ffd166";
+
+
+            /* ================================
+               NOTIFY ONCE
+            ================================= */
+
+            if (
+                previousStatus !== "CALLED" &&
+                !notificationShown
+            ) {
+
+                playBuzzer();
+
+                showTurnNotification(token);
+
+                notificationShown = true;
+
+            }
+
+        }
+
+
+        /* ================================
+           SERVED
+        ================================= */
+
+        else if (token.status === "SERVED") {
+
+            statusElement.textContent =
+                "✅ SERVED";
+
+
+            statusElement.style.background =
+                "#173c2c";
+
+
+            statusElement.style.color =
+                "#55e6a5";
+
+
+            notificationShown = false;
+
+        }
+
+
+        /* ================================
+           WAITING
+        ================================= */
+
+        else {
+
+            statusElement.textContent =
+                "WAITING";
+
+
+            statusElement.style.background =
+                "#173c2c";
+
+
+            statusElement.style.color =
+                "#55e6a5";
+
+
+            notificationShown = false;
+
+        }
+
+
+        /* ================================
+           REMEMBER STATUS
+        ================================= */
+
+        previousStatus =
+            token.status;
+
+
+    } catch (error) {
+
+        console.error(
+            "Queue error:",
+            error
+        );
+
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "Error: " +
+            error.message;
+
+    }
+}
+
+
+/* ================================
+   USER INTERACTION
+   UNLOCKS BROWSER AUDIO
+================================ */
+
+document.addEventListener(
+    "click",
+    unlockAudio,
+    { once: true }
+);
+
+
+document.addEventListener(
+    "touchstart",
+    unlockAudio,
+    { once: true }
+);
+
+
+/* ================================
+   START
+================================ */
+
+requestNotificationPermission();
+
+loadQueue();
+
+
+/* ================================
+   AUTO REFRESH
+================================ */
+
+setInterval(
+    loadQueue,
+    5000
+);
+
+</script>
+
+</body>
+</html>
