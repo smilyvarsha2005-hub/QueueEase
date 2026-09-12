@@ -2413,4 +2413,65 @@ section {
     .bottom-nav {
         width: 94%;
     }
+    /* =========================================================
+   QUEUEEASE CLICK FIX
+   Remove accidental invisible layers blocking buttons
+   ========================================================= */
+
+.section,
+.section.active {
+    pointer-events: auto;
+}
+
+.category-grid,
+.category-card,
+.category-card *,
+button,
+a,
+.nav-item,
+.icon-btn,
+.profile-btn,
+.primary-button,
+.light-button,
+.details-button,
+.close-button {
+    pointer-events: auto;
+}
+
+.category-card,
+.nav-item,
+.icon-btn,
+.profile-btn,
+button,
+a {
+    position: relative;
+    z-index: 10;
+}
+
+/* Decorative/background layers must never block clicks */
+body::before,
+body::after,
+main::before,
+main::after,
+.section::before,
+.section::after,
+.home-section::before,
+.home-section::after {
+    pointer-events: none !important;
+}
+
+/* Keep actual modals clickable when they are opened */
+#organizationModal,
+#joinModal,
+#tokenModal,
+#scannerModal {
+    pointer-events: auto;
+}
+
+#organizationModal *,
+#joinModal *,
+#tokenModal *,
+#scannerModal * {
+    pointer-events: auto;
+}
 }
