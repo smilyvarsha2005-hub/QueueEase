@@ -70,7 +70,7 @@ async function loadOrganizations(category = "") {
     `;
 
     try {
-        const response = await fetch(`${API_BASE}/organization/all`);
+        const response = await fetch(`${API_BASE}/organizations`);
 
         if (!response.ok) {
             throw new Error("Organization API failed");
@@ -174,38 +174,72 @@ function renderOrganizations(list) {
 
 
 // ================= SEARCH =================
+async function searchOrganizations() {
 
-function searchOrganizations() {
+    const homeInput = document.getElementById("searchInput");
+    const discoverInput = document.getElementById("discoverSearch");
 
-    const input = document.getElementById("searchInput");
+    let input;
+
+    // Use the input where the user is currently typing
+    if (document.activeElement === discoverInput) {
+        input = discoverInput;
+    } else {
+        input = homeInput;
+    }
 
     if (!input) return;
 
-    const search = input.value.toLowerCase().trim();
+    const search = input.value.trim().toLowerCase();
+
+    // Make sure organizations are loaded
+    if (!organizations || organizations.length === 0) {
+        await loadOrganizations();
+    }
 
     let filtered = organizations;
 
-    if (search) {
+    if (search !== "") {
+
         filtered = organizations.filter(org => {
 
-            const name =
-                (org.organizationName || "").toLowerCase();
-
-            const address =
-                (org.address || "").toLowerCase();
+            const name = String(org.organizationName || "").toLowerCase();
+            const address = String(org.address || "").toLowerCase();
+            const code = String(org.organizationCode || "").toLowerCase();
+            const category = String(org.category || "").toLowerCase();
 
             return (
                 name.includes(search) ||
-                address.includes(search)
+                address.includes(search) ||
+                code.includes(search) ||
+                category.includes(search)
             );
         });
     }
 
+    // If searching from Home, move to Discover
+    if (input === homeInput && search !== "") {
+
+        document.querySelectorAll(".section")
+            .forEach(section => section.classList.remove("active"));
+
+        document.getElementById("discoverSection")
+            ?.classList.add("active");
+
+        document.querySelectorAll(".nav-item")
+            .forEach(item => item.classList.remove("active"));
+
+        document.querySelector(".nav-item:nth-child(2)")
+            ?.classList.add("active");
+
+        if (discoverInput) {
+            discoverInput.value = input.value;
+        }
+    }
+
     renderOrganizations(filtered);
 }
-
-
-// ================= OPEN ORGANIZATION =================
+//======== OPEN ORGANIZATION =================
 
 async function openOrganization(id) {
 
