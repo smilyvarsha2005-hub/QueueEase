@@ -234,7 +234,47 @@
 </div>
 
 
+<!-- ================= DISCOVER ================= -->
 
+<section id="discoverSection" class="section">
+
+    <div class="page-title">
+
+        <button onclick="showSection('home')">
+            ←
+        </button>
+
+        <div>
+            <h1>Discover</h1>
+            <p>Find organizations and services</p>
+        </div>
+
+    </div>
+
+    <div class="search-box">
+
+        <span>🔍</span>
+
+        <input
+            type="text"
+            id="discoverSearch"
+            placeholder="Search organizations..."
+            onkeyup="searchOrganizations()"
+        >
+
+    </div>
+
+    <div
+        id="discoverCategories"
+        class="discover-categories">
+    </div>
+
+    <div
+        id="discoverList"
+        class="organization-list">
+    </div>
+
+</section>
 <!-- ================= QUEUE ================= -->
 
 <section id="queueSection"
