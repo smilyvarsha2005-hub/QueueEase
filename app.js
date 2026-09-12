@@ -1,203 +1,302 @@
-=const API_BASE = "";
-const ORGANIZATION_ID = 1;
-const SERVICE_ID = 1;
-const CUSTOMER_ID = 1;
+const API_BASE = "http://localhost:8080";
 
-let selectedNotification = "EMAIL";
-let selectedOrganizationId = 1;
-let selectedServiceId = null;
-let currentToken = null;
-
-const categoryServices = {
-    Hospital: [
-        "General Consultation",
-        "Emergency",
-        "Doctor Consultation",
-        "Lab Test",
-        "Pharmacy"
-    ],
-
-    College: [
-        "Admissions",
-        "Certificates",
-        "Exam Section",
-        "Accounts",
-        "Student Support"
-    ],
-
-    Salon: [
-        "Haircut",
-        "Hair Styling",
-        "Hair Spa",
-        "Facial",
-        "Beard Grooming"
-    ],
-
-    Restaurant: [
-        "Table Booking",
-        "Walk-in Queue",
-        "Takeaway",
-        "Order Pickup"
-    ],
-
-    Bank: [
-        "Cash Deposit",
-        "Cash Withdrawal",
-        "Account Services",
-        "Loans",
-        "Customer Support"
-    ],
-
-    "Service Center": [
-        "Vehicle Service",
-        "Repair",
-        "Oil Change",
-        "General Inspection"
-    ],
-
-    Rental: [
-        "Bike Rental",
-        "Car Rental",
-        "Vehicle Return",
-        "Booking Support"
-    ],
-
-    Government: [
-        "Certificates",
-        "Licenses",
-        "Applications",
-        "Public Services"
-    ]
-};
+let selectedCategory = "";
+let selectedOrganization = null;
+let selectedService = null;
+let selectedNotificationMethod = "EMAIL";
+let organizations = [];
+let queueTimer = null;
 
 
-/* =========================================================
-   SECTION NAVIGATION
-   ========================================================= */
+// ================= NAVIGATION =================
 
-function showSection(sectionName) {
-
-    document.querySelectorAll(".section").forEach(section => {
-        section.classList.remove("active");
+function showSection(section) {
+    document.querySelectorAll(".section").forEach(s => {
+        s.classList.remove("active");
     });
 
-    const section = document.getElementById(sectionName + "Section");
+    const target = document.getElementById(section + "Section");
 
-    if (section) {
-        section.classList.add("active");
+    if (target) {
+        target.classList.add("active");
     }
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.remove("active");
     });
+
+    if (section === "home") {
+        document.querySelector(".nav-item:nth-child(1)")?.classList.add("active");
+    }
+
+    if (section === "discover") {
+        document.querySelector(".nav-item:nth-child(2)")?.classList.add("active");
+        loadOrganizations();
+    }
+
+    if (section === "queue") {
+        document.querySelector(".nav-item:nth-child(4)")?.classList.add("active");
+        refreshQueue();
+    }
+
+    if (section === "profile") {
+        document.querySelector(".nav-item:nth-child(5)")?.classList.add("active");
+    }
 }
 
 
-/* =========================================================
-   CATEGORY SELECTION
-   ========================================================= */
+// ================= CATEGORY =================
 
 function selectCategory(category) {
+    selectedCategory = category;
 
     showSection("discover");
-
-    const search = document.getElementById("discoverSearch");
-
-    if (search) {
-        search.placeholder =
-            `Search ${category.toLowerCase()}...`;
-    }
 
     loadOrganizations(category);
 }
 
 
-/* =========================================================
-   LOAD ORGANIZATIONS
-   ========================================================= */
+// ================= LOAD ORGANIZATIONS =================
 
 async function loadOrganizations(category = "") {
+    const list = document.getElementById("discoverList");
 
-    const organizationList =
-        document.getElementById("organizationList");
+    if (!list) return;
 
-    if (!organizationList) {
+    list.innerHTML = `
+        <div class="loading">
+            Loading organizations...
+        </div>
+    `;
+
+    try {
+        const response = await fetch(`${API_BASE}/organization/all`);
+
+        if (!response.ok) {
+            throw new Error("Organization API failed");
+        }
+
+        organizations = await response.json();
+
+        let filtered = organizations;
+
+        if (category) {
+            filtered = organizations.filter(org => {
+                const name =
+                    (org.organizationName || "").toLowerCase();
+
+                const code =
+                    (org.organizationCode || "").toLowerCase();
+
+                return (
+                    name.includes(category.toLowerCase()) ||
+                    code.includes(category.toLowerCase())
+                );
+            });
+        }
+
+        renderOrganizations(filtered);
+
+    } catch (error) {
+
+        console.error(error);
+
+        list.innerHTML = `
+            <div class="empty-state">
+                <h3>Unable to load organizations</h3>
+                <p>Make sure Spring Boot is running.</p>
+            </div>
+        `;
+    }
+}
+
+
+// ================= RENDER ORGANIZATIONS =================
+
+function renderOrganizations(list) {
+
+    const container = document.getElementById("discoverList");
+
+    if (!container) return;
+
+    if (!list || list.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>No organizations found</h3>
+                <p>Try another category.</p>
+            </div>
+        `;
+
         return;
     }
+
+    container.innerHTML = list.map(org => {
+
+        const name =
+            org.organizationName || "QueueEase Organization";
+
+        const address =
+            org.address || "Hyderabad";
+
+        const id =
+            org.organizationId || org.id;
+
+        return `
+            <div class="organization-card"
+                 onclick="openOrganization(${id})">
+
+                <div class="organization-icon">
+                    🏢
+                </div>
+
+                <div class="organization-details">
+
+                    <h3>${name}</h3>
+
+                    <p>📍 ${address}</p>
+
+                    <span class="organization-status">
+                        ● Available
+                    </span>
+
+                </div>
+
+                <div class="organization-arrow">
+                    →
+                </div>
+
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+// ================= SEARCH =================
+
+function searchOrganizations() {
+
+    const input = document.getElementById("searchInput");
+
+    if (!input) return;
+
+    const search = input.value.toLowerCase().trim();
+
+    let filtered = organizations;
+
+    if (search) {
+        filtered = organizations.filter(org => {
+
+            const name =
+                (org.organizationName || "").toLowerCase();
+
+            const address =
+                (org.address || "").toLowerCase();
+
+            return (
+                name.includes(search) ||
+                address.includes(search)
+            );
+        });
+    }
+
+    renderOrganizations(filtered);
+}
+
+
+// ================= OPEN ORGANIZATION =================
+
+async function openOrganization(id) {
+
+    selectedOrganization =
+        organizations.find(org =>
+            (org.organizationId || org.id) == id
+        );
+
+    if (!selectedOrganization) return;
+
+    const name =
+        selectedOrganization.organizationName ||
+        "QueueEase Organization";
+
+    const address =
+        selectedOrganization.address ||
+        "Hyderabad";
+
+    document.getElementById("organizationName").textContent = name;
+    document.getElementById("organizationAddress").textContent = address;
+
+    const modal =
+        document.getElementById("organizationModal");
+
+    modal.classList.add("active");
+
+    await loadServices(id);
+}
+
+
+// ================= SERVICES =================
+
+async function loadServices(organizationId) {
+
+    const serviceList =
+        document.getElementById("serviceList");
+
+    if (!serviceList) return;
+
+    serviceList.innerHTML = `
+        <p>Loading services...</p>
+    `;
 
     try {
 
         const response =
-            await fetch(`${API_BASE}/organizations`);
+            await fetch(
+                `${API_BASE}/service/organization/${organizationId}`
+            );
 
         if (!response.ok) {
-            throw new Error("Unable to load organizations");
+            throw new Error("Service API failed");
         }
 
-        const organizations =
-            await response.json();
+        const services = await response.json();
 
-        let filteredOrganizations = organizations;
+        if (!services.length) {
 
-        if (category) {
-
-            filteredOrganizations =
-                organizations.filter(org => {
-
-                    const orgCategory =
-                        String(
-                            org.category ||
-                            org.organizationCategory ||
-                            ""
-                        ).toLowerCase();
-
-                    return orgCategory ===
-                        category.toLowerCase();
-                });
-        }
-
-        if (filteredOrganizations.length === 0) {
-
-            organizationList.innerHTML = `
-                <div class="empty-state">
-                    <h3>No organizations found</h3>
-                    <p>Try another category.</p>
-                </div>
+            serviceList.innerHTML = `
+                <p>No services available.</p>
             `;
 
             return;
         }
 
-        organizationList.innerHTML =
-            filteredOrganizations.map(org => {
+        serviceList.innerHTML =
+            services.map(service => {
 
                 const id =
-                    org.organizationId ??
-                    org.organization_id;
+                    service.serviceId || service.id;
 
                 const name =
-                    org.organizationName ??
-                    org.organization_name ??
-                    "Organization";
+                    service.serviceName || "Service";
 
-                const address =
-                    org.address ??
-                    "Location available";
+                const time =
+                    service.estimatedServiceTime || 5;
 
                 return `
                     <button
-                        class="business-card"
-                        onclick="openOrganization(${id})"
-                    >
-                        <div class="business-card-icon">
-                            🏢
-                        </div>
+                        class="service-option"
+                        onclick="selectService(${id}, '${escapeText(name)}')">
 
                         <div>
-                            <h3>${name}</h3>
-                            <p>${address}</p>
+                            <strong>${name}</strong>
+                            <small>
+                                Estimated time: ${time} min
+                            </small>
                         </div>
+
+                        <span>→</span>
+
                     </button>
                 `;
 
@@ -205,607 +304,300 @@ async function loadOrganizations(category = "") {
 
     } catch (error) {
 
-        console.error(
-            "Organization loading error:",
-            error
-        );
+        console.error(error);
 
-        organizationList.innerHTML = `
-            <div class="empty-state">
-                <h3>Unable to load organizations</h3>
-                <p>Please try again.</p>
-            </div>
+        serviceList.innerHTML = `
+            <p>Unable to load services.</p>
         `;
     }
 }
 
 
-/* =========================================================
-   OPEN ORGANIZATION
-   ========================================================= */
-
-async function openOrganization(id) {
-
-    selectedOrganizationId = id;
-
-    try {
-
-        const organizationResponse =
-            await fetch(`${API_BASE}/organizations`);
-
-        if (!organizationResponse.ok) {
-            throw new Error("Organization request failed");
-        }
-
-        const organizations =
-            await organizationResponse.json();
-
-        const organization =
-            organizations.find(org =>
-                Number(
-                    org.organizationId ??
-                    org.organization_id
-                ) === Number(id)
-            );
-
-        if (!organization) {
-            return;
-        }
-
-        const name =
-            document.getElementById("organizationName");
-
-        const address =
-            document.getElementById("organizationAddress");
-
-        const serviceList =
-            document.getElementById("serviceList");
-
-        if (name) {
-
-            name.textContent =
-                organization.organizationName ??
-                organization.organization_name ??
-                "Organization";
-        }
-
-        if (address) {
-
-            address.textContent =
-                organization.address ??
-                "Address not available";
-        }
-
-
-        /* Load services */
-
-        const serviceResponse =
-            await fetch(`${API_BASE}/services/${id}`);
-
-        let services = [];
-
-        if (serviceResponse.ok) {
-            services = await serviceResponse.json();
-        }
-
-
-        if (serviceList) {
-
-            if (services.length === 0) {
-
-                serviceList.innerHTML = `
-                    <div class="empty-state">
-                        <p>
-                            No services available
-                            for this organization.
-                        </p>
-                    </div>
-                `;
-
-            } else {
-
-                serviceList.innerHTML =
-                    services.map(service => {
-
-                        const serviceId =
-                            service.serviceId ??
-                            service.service_id;
-
-                        const serviceName =
-                            service.serviceName ??
-                            service.service_name ??
-                            "Service";
-
-                        return `
-                            <button
-                                class="service-option"
-                                onclick="selectService(
-                                    ${serviceId},
-                                    '${escapeQuotes(serviceName)}'
-                                )"
-                            >
-                                <span>
-                                    ${serviceName}
-                                </span>
-
-                                <span>›</span>
-                            </button>
-                        `;
-
-                    }).join("");
-            }
-        }
-
-
-        const modal =
-            document.getElementById("organizationModal");
-
-        if (modal) {
-            modal.classList.add("open");
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Organization error:",
-            error
-        );
-    }
-}
-
-
-/* =========================================================
-   ESCAPE QUOTES
-   ========================================================= */
-
-function escapeQuotes(value) {
-
-    return String(value)
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'");
-}
-
-
-/* =========================================================
-   SELECT SERVICE
-   ========================================================= */
+// ================= SELECT SERVICE =================
 
 function selectService(serviceId, serviceName) {
 
-    selectedServiceId = serviceId;
+    selectedService = serviceId;
 
-    const selectedService =
-        document.getElementById("selectedService");
-
-    if (selectedService) {
-        selectedService.textContent = serviceName;
-    }
+    document.getElementById("selectedService").textContent =
+        serviceName;
 
     closeModal("organizationModal");
 
-    const joinModal =
-        document.getElementById("joinModal");
+    document.getElementById("joinModal")
+        .classList.add("active");
+}
 
-    if (joinModal) {
-        joinModal.classList.add("open");
+
+// ================= NOTIFICATION =================
+
+function selectNotification(method, button) {
+
+    selectedNotificationMethod = method;
+
+    document.querySelectorAll(".notification-option")
+        .forEach(btn => btn.classList.remove("selected"));
+
+    if (button) {
+        button.classList.add("selected");
+    }
+
+    const contact =
+        document.getElementById("contact");
+
+    if (!contact) return;
+
+    if (method === "EMAIL") {
+
+        contact.placeholder =
+            "Enter email address";
+
+    } else if (method === "SMS") {
+
+        contact.placeholder =
+            "Enter mobile number";
+
+    } else {
+
+        contact.placeholder =
+            "Enter mobile number";
     }
 }
 
 
-/* =========================================================
-   NOTIFICATION SELECTION
-   ========================================================= */
-
-function selectNotification(method) {
-
-    selectedNotification = method;
-
-    document
-        .querySelectorAll(".notification-option")
-        .forEach(button => {
-
-            const buttonMethod =
-                button.dataset.notification ||
-                button.dataset.notify;
-
-            button.classList.toggle(
-                "active",
-                buttonMethod === method
-            );
-        });
-
-
-    const notificationMessage =
-        document.getElementById("notificationMessage");
-
-    if (notificationMessage) {
-
-        if (method === "EMAIL") {
-
-            notificationMessage.textContent =
-                "Queue updates will be sent by email.";
-
-        } else if (method === "SMS") {
-
-            notificationMessage.textContent =
-                "Queue updates will be sent by SMS.";
-
-        } else if (method === "CALL") {
-
-            notificationMessage.textContent =
-                "You will receive a call when your turn is near.";
-        }
-    }
-}
-
-
-/* =========================================================
-   JOIN QUEUE
-   ========================================================= */
+// ================= JOIN QUEUE =================
 
 async function joinQueue() {
 
-    const customerNameElement =
-        document.getElementById("customerName");
-
-    const contactElement =
-        document.getElementById("contact");
-
     const customerName =
-        customerNameElement ?
-        customerNameElement.value.trim() :
-        "";
+        document.getElementById("customerName").value.trim();
 
     const contact =
-        contactElement ?
-        contactElement.value.trim() :
-        "";
-
+        document.getElementById("contact").value.trim();
 
     if (!customerName) {
-
         alert("Please enter your name.");
-
         return;
     }
-
 
     if (!contact) {
-
         alert("Please enter your contact.");
-
         return;
     }
 
-
-    if (!selectedOrganizationId) {
-
+    if (!selectedOrganization) {
         alert("Please select an organization.");
-
         return;
     }
 
-
-    if (!selectedServiceId) {
-
+    if (!selectedService) {
         alert("Please select a service.");
-
         return;
     }
 
+    const organizationId =
+        selectedOrganization.organizationId ||
+        selectedOrganization.id;
+
+    const data = {
+
+        customerName: customerName,
+
+        contact: contact,
+
+        notificationMethod:
+            selectedNotificationMethod,
+
+        organizationId:
+            organizationId,
+
+        serviceId:
+            selectedService
+    };
 
     try {
 
-        const url =
-            `${API_BASE}/queue/take` +
-            `?customerName=${encodeURIComponent(customerName)}` +
-            `&contact=${encodeURIComponent(contact)}` +
-            `&notificationMethod=${encodeURIComponent(selectedNotification)}` +
-            `&organizationId=${selectedOrganizationId}` +
-            `&serviceId=${selectedServiceId}` +
-            `&customerId=${CUSTOMER_ID}`;
-
-
         const response =
-            await fetch(url, {
-                method: "POST"
-            });
+            await fetch(`${API_BASE}/queue/take`, {
 
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(data)
+            });
 
         if (!response.ok) {
 
-            throw new Error(
-                `Queue request failed: ${response.status}`
-            );
-        }
+            const message =
+                await response.text();
 
+            throw new Error(message);
+        }
 
         const token =
             await response.json();
 
-
-        currentToken = token;
-
+        closeModal("joinModal");
 
         displayToken(token);
 
-        generateQRCode(token);
-
-
-        closeModal("joinModal");
-
-
-        const tokenModal =
-            document.getElementById("tokenModal");
-
-        if (tokenModal) {
-            tokenModal.classList.add("open");
-        }
-
-
-        showNotification(
-            "QueueEase 🎫",
-            "Your queue token has been created."
-        );
-
-
     } catch (error) {
 
-        console.error(
-            "Join queue error:",
-            error
-        );
+        console.error(error);
 
         alert(
-            "Unable to join the queue right now."
+            "Unable to join queue.\n\n" +
+            "Make sure the selected organization and service are available."
         );
     }
 }
 
 
-/* =========================================================
-   DISPLAY TOKEN
-   ========================================================= */
+// ================= DISPLAY TOKEN =================
 
-function displayToken(token) {
+function displayToken(data) {
 
-    if (!token) {
-        return;
-    }
+    document.getElementById("tokenNumber").textContent =
+        "#" + (data.tokenNumber ?? "--");
 
+    document.getElementById("tokenPosition").textContent =
+        data.queuePosition ?? "--";
 
-    const tokenNumber =
-        token.tokenNumber ??
-        token.token_number;
+    document.getElementById("tokenWait").textContent =
+        (data.estimatedWaitingTime ?? "--") + " min";
 
-    const queuePosition =
-        token.queuePosition ??
-        token.queue_position ??
-        0;
+    document.getElementById("queueToken").textContent =
+        "#" + (data.tokenNumber ?? "--");
 
-    const estimatedWait =
-        token.estimatedWaitingTime ??
-        token.estimated_waiting_time ??
-        0;
+    document.getElementById("queuePosition").textContent =
+        data.queuePosition ?? "--";
 
+    document.getElementById("queueWait").textContent =
+        (data.estimatedWaitingTime ?? "--") + " min";
 
-    const elements = {
+    document.getElementById("activeOrg").textContent =
+        selectedOrganization?.organizationName ||
+        "QueueEase";
 
-        tokenNumber:
-            document.getElementById("tokenNumber"),
+    document.getElementById("activeToken").textContent =
+        "#" + (data.tokenNumber ?? "--");
 
-        tokenPosition:
-            document.getElementById("tokenPosition"),
+    document.getElementById("activePosition").textContent =
+        data.queuePosition ?? "--";
 
-        tokenWait:
-            document.getElementById("tokenWait"),
+    document.getElementById("activeWait").textContent =
+        (data.estimatedWaitingTime ?? "--") + " min";
 
-        queueToken:
-            document.getElementById("queueToken"),
+    document.getElementById("activeTicket")
+        ?.classList.remove("hidden");
 
-        queuePosition:
-            document.getElementById("queuePosition"),
+    const ahead =
+        Math.max(
+            0,
+            (data.queuePosition || 1) - 1
+        );
 
-        queueWait:
-            document.getElementById("queueWait"),
+    document.getElementById("peopleAhead").textContent =
+        ahead + " people ahead";
 
-        activeToken:
-            document.getElementById("activeToken"),
+    document.getElementById("queueProgress").style.width =
+        Math.max(
+            5,
+            Math.min(
+                100,
+                100 / (data.queuePosition || 1)
+            )
+        ) + "%";
 
-        activePosition:
-            document.getElementById("activePosition"),
+    document.getElementById("notificationMessage").textContent =
+        "🔔 Queue updates enabled";
 
-        activeWait:
-            document.getElementById("activeWait")
-    };
-
-
-    if (elements.tokenNumber) {
-        elements.tokenNumber.textContent =
-            tokenNumber;
-    }
-
-    if (elements.tokenPosition) {
-        elements.tokenPosition.textContent =
-            queuePosition;
-    }
-
-    if (elements.tokenWait) {
-        elements.tokenWait.textContent =
-            `${estimatedWait} min`;
-    }
-
-    if (elements.queueToken) {
-        elements.queueToken.textContent =
-            tokenNumber;
-    }
-
-    if (elements.queuePosition) {
-        elements.queuePosition.textContent =
-            queuePosition;
-    }
-
-    if (elements.queueWait) {
-        elements.queueWait.textContent =
-            `${estimatedWait} min`;
-    }
-
-    if (elements.activeToken) {
-        elements.activeToken.textContent =
-            tokenNumber;
-    }
-
-    if (elements.activePosition) {
-        elements.activePosition.textContent =
-            queuePosition;
-    }
-
-    if (elements.activeWait) {
-        elements.activeWait.textContent =
-            `${estimatedWait} min`;
-    }
-
+    document.getElementById("tokenModal")
+        .classList.add("active");
 
     localStorage.setItem(
         "queueEaseToken",
-        JSON.stringify(token)
+        JSON.stringify(data)
     );
 }
 
 
-/* =========================================================
-   QR CODE
-   ========================================================= */
-
-function generateQRCode(token) {
-
-    const qrCode =
-        document.getElementById("qrCode");
-
-    if (!qrCode || !token) {
-        return;
-    }
-
-
-    const tokenNumber =
-        token.tokenNumber ??
-        token.token_number;
-
-
-    const liveQueueURL =
-        `${window.location.origin}` +
-        `/QueueEase/live-queue.html` +
-        `?token=${encodeURIComponent(tokenNumber)}`;
-
-
-    qrCode.innerHTML = `
-        <img
-            src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(liveQueueURL)}"
-            alt="QueueEase QR Code"
-        >
-    `;
-}
-
-
-/* =========================================================
-   REFRESH QUEUE
-   ========================================================= */
+// ================= REFRESH QUEUE =================
 
 async function refreshQueue() {
+
+    const saved =
+        localStorage.getItem("queueEaseToken");
+
+    if (!saved) return;
+
+    const oldData =
+        JSON.parse(saved);
 
     try {
 
         const response =
             await fetch(`${API_BASE}/queue/all`);
 
-        if (!response.ok) {
-            return;
-        }
+        if (!response.ok) return;
 
         const tokens =
             await response.json();
 
+        const current =
+            tokens.find(token =>
+                token.tokenNumber ==
+                oldData.tokenNumber
+            );
 
-        if (!currentToken) {
-            return;
-        }
+        if (!current) return;
 
-
-        const currentNumber =
-            currentToken.tokenNumber ??
-            currentToken.token_number;
-
-
-        const latest =
-            tokens.find(token => {
-
-                const number =
-                    token.tokenNumber ??
-                    token.token_number;
-
-                return Number(number) ===
-                    Number(currentNumber);
-            });
-
-
-        if (latest) {
-
-            currentToken = latest;
-
-            displayToken(latest);
-        }
+        displayQueueData(current);
 
     } catch (error) {
 
-        console.log(
-            "Queue refresh unavailable."
-        );
+        console.error(error);
     }
 }
 
 
-/* =========================================================
-   GET ALL TOKENS
-   ========================================================= */
+// ================= QUEUE DATA =================
 
-function getAllTokens() {
+function displayQueueData(data) {
 
-    return refreshQueue();
-}
+    document.getElementById("queueToken").textContent =
+        "#" + data.tokenNumber;
 
+    document.getElementById("queuePosition").textContent =
+        data.queuePosition;
 
-/* =========================================================
-   SHOW ALL CATEGORIES
-   ========================================================= */
+    document.getElementById("queueWait").textContent =
+        data.estimatedWaitingTime + " min";
 
-function showAllCategories() {
-
-    const container =
-        document.getElementById(
-            "discoverCategories"
+    const ahead =
+        Math.max(
+            0,
+            data.queuePosition - 1
         );
 
-    if (!container) {
-        return;
-    }
+    document.getElementById("peopleAhead").textContent =
+        ahead + " people ahead";
 
+    document.getElementById("activeToken").textContent =
+        "#" + data.tokenNumber;
 
-    container.innerHTML =
-        Object.keys(categoryServices)
-            .map(category => `
-                <button
-                    onclick="selectCategory('${escapeQuotes(category)}')"
-                >
-                    ${category}
-                </button>
-            `)
-            .join("");
+    document.getElementById("activePosition").textContent =
+        data.queuePosition;
+
+    document.getElementById("activeWait").textContent =
+        data.estimatedWaitingTime + " min";
 }
 
 
-/* =========================================================
-   CLOSE MODAL
-   ========================================================= */
+// ================= MODALS =================
 
 function closeModal(id) {
 
@@ -813,231 +605,154 @@ function closeModal(id) {
         document.getElementById(id);
 
     if (modal) {
-        modal.classList.remove("open");
+        modal.classList.remove("active");
+    }
+
+    if (id === "scannerModal") {
+        stopScanner();
     }
 }
 
 
-/* =========================================================
-   BROWSER NOTIFICATION
-   ========================================================= */
+// ================= QR SCANNER =================
 
-function showNotification(title, message) {
+let scannerStream = null;
 
-    if (
-        "Notification" in window &&
-        Notification.permission === "granted"
-    ) {
+async function openScanner() {
 
-        new Notification(
-            title,
-            {
-                body: message
-            }
-        );
+    const modal =
+        document.getElementById("scannerModal");
+
+    if (!modal) return;
+
+    modal.classList.add("active");
+
+    const video =
+        document.getElementById("scannerVideo");
+
+    try {
+
+        scannerStream =
+            await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "environment"
+                }
+            });
+
+        video.srcObject =
+            scannerStream;
+
+        document.getElementById("scannerMessage")
+            .textContent =
+            "Camera active. Point it at a QueueEase QR code.";
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("scannerMessage")
+            .textContent =
+            "Camera permission was not available.";
     }
 }
 
 
-/* =========================================================
-   REQUEST NOTIFICATION PERMISSION
-   ========================================================= */
+function closeScanner() {
 
-async function requestNotificationPermission() {
+    closeModal("scannerModal");
+}
 
-    if (
-        "Notification" in window &&
-        Notification.permission === "default"
-    ) {
+
+function stopScanner() {
+
+    if (scannerStream) {
+
+        scannerStream.getTracks()
+            .forEach(track => track.stop());
+
+        scannerStream = null;
+    }
+
+    const video =
+        document.getElementById("scannerVideo");
+
+    if (video) {
+        video.srcObject = null;
+    }
+}
+
+
+// ================= HELPERS =================
+
+function escapeText(text) {
+
+    return String(text)
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;");
+}
+
+
+// ================= INITIALIZE =================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    showSection("home");
+
+    loadOrganizations();
+
+    const saved =
+        localStorage.getItem("queueEaseToken");
+
+    if (saved) {
 
         try {
-            await Notification.requestPermission();
+
+            const data =
+                JSON.parse(saved);
+
+            if (data) {
+                displayTokenDataWithoutModal(data);
+            }
+
         } catch (error) {
-            console.log(
-                "Notification permission unavailable."
-            );
+            console.error(error);
         }
     }
+});
+
+
+function displayTokenDataWithoutModal(data) {
+
+    document.getElementById("activeTicket")
+        ?.classList.remove("hidden");
+
+    document.getElementById("activeToken").textContent =
+        "#" + (data.tokenNumber ?? "--");
+
+    document.getElementById("activePosition").textContent =
+        data.queuePosition ?? "--";
+
+    document.getElementById("activeWait").textContent =
+        (data.estimatedWaitingTime ?? "--") + " min";
+
+    document.getElementById("activeOrg").textContent =
+        selectedOrganization?.organizationName ||
+        "QueueEase";
 }
 
 
-/* =========================================================
-   PAGE INITIALIZATION
-   ========================================================= */
+// ================= MAKE FUNCTIONS AVAILABLE TO HTML =================
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        /*
-         * Home is the first section.
-         */
-
-        showSection("home");
-
-
-        /*
-         * Category buttons.
-         */
-
-        showAllCategories();
-
-
-        /*
-         * Notification permission.
-         */
-
-        requestNotificationPermission();
-
-
-        /*
-         * Restore saved token.
-         */
-
-        const savedToken =
-            localStorage.getItem(
-                "queueEaseToken"
-            );
-
-
-        if (savedToken) {
-
-            try {
-
-                currentToken =
-                    JSON.parse(savedToken);
-
-                displayToken(
-                    currentToken
-                );
-
-                generateQRCode(
-                    currentToken
-                );
-
-            } catch (error) {
-
-                localStorage.removeItem(
-                    "queueEaseToken"
-                );
-            }
-        }
-
-
-        /*
-         * Load organizations.
-         */
-
-        loadOrganizations();
-
-
-        /*
-         * Refresh queue every 5 seconds.
-         */
-
-        refreshQueue();
-
-        setInterval(
-            refreshQueue,
-            5000
-        );
-
-
-        /*
-         * Notification buttons.
-         */
-
-        document
-            .querySelectorAll(
-                ".notification-option"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const method =
-                            button.dataset.notification ||
-                            button.dataset.notify ||
-                            "EMAIL";
-
-                        selectNotification(
-                            method
-                        );
-                    }
-                );
-            });
-
-
-        /*
-         * Navigation buttons.
-         */
-
-        document
-            .querySelectorAll(
-                "[data-section]"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    event => {
-
-                        event.preventDefault();
-
-                        const section =
-                            button.dataset.section;
-
-                        if (section) {
-                            showSection(section);
-                        }
-                    }
-                );
-            });
-    }
-);
-
-
-/* =========================================================
-   MAKE FUNCTIONS AVAILABLE TO HTML onclick
-   ========================================================= */
-
-window.showSection =
-    showSection;
-
-window.selectCategory =
-    selectCategory;
-
-window.loadOrganizations =
-    loadOrganizations;
-
-window.openOrganization =
-    openOrganization;
-
-window.selectService =
-    selectService;
-
-window.selectNotification =
-    selectNotification;
-
-window.joinQueue =
-    joinQueue;
-
-window.displayToken =
-    displayToken;
-
-window.generateQRCode =
-    generateQRCode;
-
-window.refreshQueue =
-    refreshQueue;
-
-window.getAllTokens =
-    getAllTokens;
-
-window.showAllCategories =
-    showAllCategories;
-
-window.closeModal =
-    closeModal;
+window.showSection = showSection;
+window.selectCategory = selectCategory;
+window.loadOrganizations = loadOrganizations;
+window.searchOrganizations = searchOrganizations;
+window.openOrganization = openOrganization;
+window.selectService = selectService;
+window.selectNotification = selectNotification;
+window.joinQueue = joinQueue;
+window.refreshQueue = refreshQueue;
+window.displayToken = displayToken;
+window.closeModal = closeModal;
+window.openScanner = openScanner;
+window.closeScanner = closeScanner;
