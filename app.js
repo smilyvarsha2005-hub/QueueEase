@@ -480,66 +480,64 @@ async function openOrganization(id) {
 
 
 // ================= SERVICES =================
-
 async function loadServices(organizationId) {
     const serviceList = document.getElementById("serviceList");
 
     if (!serviceList) return;
 
-    serviceList.innerHTML = `
-        <p style="text-align:center;">Loading services...</p>
-    `;
-
-    // GitHub Pages fallback services
     const fallbackServices = {
         1: [
             { serviceId: 1, serviceName: "General Consultation", estimatedServiceTime: 10 },
             { serviceId: 2, serviceName: "Emergency Consultation", estimatedServiceTime: 15 },
             { serviceId: 3, serviceName: "Health Checkup", estimatedServiceTime: 10 }
         ],
-
         2: [
             { serviceId: 4, serviceName: "Admissions", estimatedServiceTime: 10 },
             { serviceId: 5, serviceName: "Student Services", estimatedServiceTime: 5 },
             { serviceId: 6, serviceName: "Fee Payment", estimatedServiceTime: 5 }
         ],
-
         3: [
             { serviceId: 7, serviceName: "Haircut", estimatedServiceTime: 20 },
             { serviceId: 8, serviceName: "Hair Styling", estimatedServiceTime: 25 },
             { serviceId: 9, serviceName: "Facial", estimatedServiceTime: 30 }
         ],
-
         4: [
             { serviceId: 10, serviceName: "Table Reservation", estimatedServiceTime: 5 },
             { serviceId: 11, serviceName: "Food Order", estimatedServiceTime: 15 },
             { serviceId: 12, serviceName: "Takeaway", estimatedServiceTime: 10 }
         ],
-
         5: [
             { serviceId: 13, serviceName: "Cash Counter", estimatedServiceTime: 10 },
             { serviceId: 14, serviceName: "Account Services", estimatedServiceTime: 15 },
             { serviceId: 15, serviceName: "Loan Services", estimatedServiceTime: 20 }
         ],
-
         6: [
             { serviceId: 16, serviceName: "Vehicle Service", estimatedServiceTime: 30 },
             { serviceId: 17, serviceName: "Repair Service", estimatedServiceTime: 25 },
             { serviceId: 18, serviceName: "General Service", estimatedServiceTime: 20 }
         ],
-
         7: [
             { serviceId: 19, serviceName: "Bike Rental", estimatedServiceTime: 10 },
             { serviceId: 20, serviceName: "Car Rental", estimatedServiceTime: 15 },
             { serviceId: 21, serviceName: "Vehicle Return", estimatedServiceTime: 10 }
         ],
-
         8: [
             { serviceId: 22, serviceName: "General Enquiry", estimatedServiceTime: 10 },
             { serviceId: 23, serviceName: "Certificate Services", estimatedServiceTime: 15 },
             { serviceId: 24, serviceName: "Application Services", estimatedServiceTime: 15 }
         ]
     };
+
+    // GitHub Pages: use frontend services directly
+    if (window.location.hostname.includes("github.io")) {
+        renderServices(fallbackServices[organizationId] || []);
+        return;
+    }
+
+    // Local version: use Spring Boot backend
+    serviceList.innerHTML = `
+        <p style="text-align:center;">Loading services...</p>
+    `;
 
     try {
         const response = await fetch(
@@ -551,19 +549,13 @@ async function loadServices(organizationId) {
         }
 
         const services = await response.json();
-
         renderServices(services);
 
     } catch (error) {
-        console.log("Using GitHub fallback services");
-
-        const services =
-            fallbackServices[organizationId] || [];
-
-        renderServices(services);
+        console.log("Using fallback services");
+        renderServices(fallbackServices[organizationId] || []);
     }
 }
-
 // ================= SELECT SERVICE =================
 
 function selectService(
