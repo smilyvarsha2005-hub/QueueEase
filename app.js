@@ -1,21 +1,22 @@
-const API_BASE = "http://localhost:8080";
+const API_BASE = "http://127.0.0.1:8080";
 
 let selectedCategory = "";
 let selectedOrganization = null;
 let selectedService = null;
 let selectedNotificationMethod = "EMAIL";
 let organizations = [];
-let queueTimer = null;
 
 
 // ================= NAVIGATION =================
 
 function showSection(section) {
+
     document.querySelectorAll(".section").forEach(s => {
         s.classList.remove("active");
     });
 
-    const target = document.getElementById(section + "Section");
+    const target =
+        document.getElementById(section + "Section");
 
     if (target) {
         target.classList.add("active");
@@ -26,21 +27,27 @@ function showSection(section) {
     });
 
     if (section === "home") {
-        document.querySelector(".nav-item:nth-child(1)")?.classList.add("active");
+        document.querySelector(".nav-item:nth-child(1)")
+            ?.classList.add("active");
     }
 
     if (section === "discover") {
-        document.querySelector(".nav-item:nth-child(2)")?.classList.add("active");
+        document.querySelector(".nav-item:nth-child(2)")
+            ?.classList.add("active");
+
         loadOrganizations();
     }
 
     if (section === "queue") {
-        document.querySelector(".nav-item:nth-child(4)")?.classList.add("active");
+        document.querySelector(".nav-item:nth-child(4)")
+            ?.classList.add("active");
+
         refreshQueue();
     }
 
     if (section === "profile") {
-        document.querySelector(".nav-item:nth-child(5)")?.classList.add("active");
+        document.querySelector(".nav-item:nth-child(5)")
+            ?.classList.add("active");
     }
 }
 
@@ -48,6 +55,7 @@ function showSection(section) {
 // ================= CATEGORY =================
 
 function selectCategory(category) {
+
     selectedCategory = category;
 
     showSection("discover");
@@ -59,7 +67,9 @@ function selectCategory(category) {
 // ================= LOAD ORGANIZATIONS =================
 
 async function loadOrganizations(category = "") {
-    const list = document.getElementById("discoverList");
+
+    const list =
+        document.getElementById("discoverList");
 
     if (!list) return;
 
@@ -70,36 +80,65 @@ async function loadOrganizations(category = "") {
     `;
 
     try {
-        const response = await fetch(`${API_BASE}/organizations`);
+
+        const response =
+            await fetch(
+                `${API_BASE}/organization/all`
+            );
 
         if (!response.ok) {
-            throw new Error("Organization API failed");
+            throw new Error(
+                "Organization API failed"
+            );
         }
 
-        organizations = await response.json();
+        organizations =
+            await response.json();
 
-        let filtered = organizations;
+        let filtered =
+            organizations;
 
         if (category) {
-            filtered = organizations.filter(org => {
-                const name =
-                    (org.organizationName || "").toLowerCase();
 
-                const code =
-                    (org.organizationCode || "").toLowerCase();
+            const selected =
+                String(category)
+                    .toLowerCase()
+                    .trim();
 
-                return (
-                    name.includes(category.toLowerCase()) ||
-                    code.includes(category.toLowerCase())
-                );
-            });
+            filtered =
+                organizations.filter(org => {
+
+                    const name =
+                        String(
+                            org.organizationName || ""
+                        ).toLowerCase();
+
+                    const code =
+                        String(
+                            org.organizationCode || ""
+                        ).toLowerCase();
+
+                    const orgCategory =
+                        String(
+                            org.category || ""
+                        ).toLowerCase();
+
+                    return (
+                        name.includes(selected) ||
+                        code.includes(selected) ||
+                        orgCategory.includes(selected)
+                    );
+                });
         }
 
         renderOrganizations(filtered);
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Organization loading error:",
+            error
+        );
 
         list.innerHTML = `
             <div class="empty-state">
@@ -115,7 +154,10 @@ async function loadOrganizations(category = "") {
 
 function renderOrganizations(list) {
 
-    const container = document.getElementById("discoverList");
+    const container =
+        document.getElementById(
+            "discoverList"
+        );
 
     if (!container) return;
 
@@ -131,58 +173,74 @@ function renderOrganizations(list) {
         return;
     }
 
-    container.innerHTML = list.map(org => {
+    container.innerHTML =
+        list.map(org => {
 
-        const name =
-            org.organizationName || "QueueEase Organization";
+            const name =
+                org.organizationName ||
+                "QueueEase Organization";
 
-        const address =
-            org.address || "Hyderabad";
+            const address =
+                org.address ||
+                "Hyderabad";
 
-        const id =
-            org.organizationId || org.id;
+            const id =
+                org.organizationId ??
+                org.id;
 
-        return `
-            <div class="organization-card"
-                 onclick="openOrganization(${id})">
+            return `
+                <div
+                    class="organization-card"
+                    onclick="openOrganization(${id})"
+                >
 
-                <div class="organization-icon">
-                    🏢
+                    <div class="organization-icon">
+                        🏢
+                    </div>
+
+                    <div class="organization-details">
+
+                        <h3>${name}</h3>
+
+                        <p>📍 ${address}</p>
+
+                        <span class="organization-status">
+                            ● Available
+                        </span>
+
+                    </div>
+
+                    <div class="organization-arrow">
+                        →
+                    </div>
+
                 </div>
+            `;
 
-                <div class="organization-details">
-
-                    <h3>${name}</h3>
-
-                    <p>📍 ${address}</p>
-
-                    <span class="organization-status">
-                        ● Available
-                    </span>
-
-                </div>
-
-                <div class="organization-arrow">
-                    →
-                </div>
-
-            </div>
-        `;
-
-    }).join("");
+        }).join("");
 }
 
 
 // ================= SEARCH =================
+
 async function searchOrganizations() {
 
-    const homeInput = document.getElementById("searchInput");
-    const discoverInput = document.getElementById("discoverSearch");
+    const homeInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const discoverInput =
+        document.getElementById(
+            "discoverSearch"
+        );
 
     let input;
 
-    // Use the input where the user is currently typing
-    if (document.activeElement === discoverInput) {
+    if (
+        document.activeElement ===
+        discoverInput
+    ) {
         input = discoverInput;
     } else {
         input = homeInput;
@@ -190,65 +248,109 @@ async function searchOrganizations() {
 
     if (!input) return;
 
-    const search = input.value.trim().toLowerCase();
+    const search =
+        input.value
+            .trim()
+            .toLowerCase();
 
-    // Make sure organizations are loaded
-    if (!organizations || organizations.length === 0) {
+    if (
+        !organizations ||
+        organizations.length === 0
+    ) {
         await loadOrganizations();
     }
 
-    let filtered = organizations;
+    let filtered =
+        organizations;
 
     if (search !== "") {
 
-        filtered = organizations.filter(org => {
+        filtered =
+            organizations.filter(org => {
 
-            const name = String(org.organizationName || "").toLowerCase();
-            const address = String(org.address || "").toLowerCase();
-            const code = String(org.organizationCode || "").toLowerCase();
-            const category = String(org.category || "").toLowerCase();
+                const name =
+                    String(
+                        org.organizationName || ""
+                    ).toLowerCase();
 
-            return (
-                name.includes(search) ||
-                address.includes(search) ||
-                code.includes(search) ||
-                category.includes(search)
-            );
-        });
+                const address =
+                    String(
+                        org.address || ""
+                    ).toLowerCase();
+
+                const code =
+                    String(
+                        org.organizationCode || ""
+                    ).toLowerCase();
+
+                const category =
+                    String(
+                        org.category || ""
+                    ).toLowerCase();
+
+                return (
+                    name.includes(search) ||
+                    address.includes(search) ||
+                    code.includes(search) ||
+                    category.includes(search)
+                );
+            });
     }
 
-    // If searching from Home, move to Discover
-    if (input === homeInput && search !== "") {
+    if (
+        input === homeInput &&
+        search !== ""
+    ) {
 
-        document.querySelectorAll(".section")
-            .forEach(section => section.classList.remove("active"));
+        document.querySelectorAll(
+            ".section"
+        ).forEach(section => {
+            section.classList.remove(
+                "active"
+            );
+        });
 
-        document.getElementById("discoverSection")
-            ?.classList.add("active");
+        document.getElementById(
+            "discoverSection"
+        )?.classList.add("active");
 
-        document.querySelectorAll(".nav-item")
-            .forEach(item => item.classList.remove("active"));
+        document.querySelectorAll(
+            ".nav-item"
+        ).forEach(item => {
+            item.classList.remove(
+                "active"
+            );
+        });
 
-        document.querySelector(".nav-item:nth-child(2)")
-            ?.classList.add("active");
+        document.querySelector(
+            ".nav-item:nth-child(2)"
+        )?.classList.add("active");
 
         if (discoverInput) {
-            discoverInput.value = input.value;
+            discoverInput.value =
+                input.value;
         }
     }
 
     renderOrganizations(filtered);
 }
-//======== OPEN ORGANIZATION =================
+
+
+// ================= OPEN ORGANIZATION =================
 
 async function openOrganization(id) {
 
     selectedOrganization =
         organizations.find(org =>
-            (org.organizationId || org.id) == id
+            (
+                org.organizationId ??
+                org.id
+            ) == id
         );
 
-    if (!selectedOrganization) return;
+    if (!selectedOrganization) {
+        return;
+    }
 
     const name =
         selectedOrganization.organizationName ||
@@ -258,13 +360,34 @@ async function openOrganization(id) {
         selectedOrganization.address ||
         "Hyderabad";
 
-    document.getElementById("organizationName").textContent = name;
-    document.getElementById("organizationAddress").textContent = address;
+    const organizationName =
+        document.getElementById(
+            "organizationName"
+        );
+
+    if (organizationName) {
+        organizationName.textContent =
+            name;
+    }
+
+    const organizationAddress =
+        document.getElementById(
+            "organizationAddress"
+        );
+
+    if (organizationAddress) {
+        organizationAddress.textContent =
+            address;
+    }
 
     const modal =
-        document.getElementById("organizationModal");
+        document.getElementById(
+            "organizationModal"
+        );
 
-    modal.classList.add("active");
+    if (modal) {
+        modal.classList.add("active");
+    }
 
     await loadServices(id);
 }
@@ -272,10 +395,14 @@ async function openOrganization(id) {
 
 // ================= SERVICES =================
 
-async function loadServices(organizationId) {
+async function loadServices(
+    organizationId
+) {
 
     const serviceList =
-        document.getElementById("serviceList");
+        document.getElementById(
+            "serviceList"
+        );
 
     if (!serviceList) return;
 
@@ -285,18 +412,36 @@ async function loadServices(organizationId) {
 
     try {
 
+        const url =
+            `${API_BASE}/services/${organizationId}`;
+
+        console.log(
+            "Services API:",
+            url
+        );
+
         const response =
-            await fetch(
-                `${API_BASE}/service/organization/${organizationId}`
-            );
+            await fetch(url);
 
         if (!response.ok) {
-            throw new Error("Service API failed");
+
+            throw new Error(
+                `Services API returned ${response.status}`
+            );
         }
 
-        const services = await response.json();
+        const services =
+            await response.json();
 
-        if (!services.length) {
+        console.log(
+            "Services received:",
+            services
+        );
+
+        if (
+            !Array.isArray(services) ||
+            services.length === 0
+        ) {
 
             serviceList.innerHTML = `
                 <p>No services available.</p>
@@ -309,24 +454,36 @@ async function loadServices(organizationId) {
             services.map(service => {
 
                 const id =
-                    service.serviceId || service.id;
+                    service.serviceId;
 
                 const name =
-                    service.serviceName || "Service";
+                    service.serviceName ||
+                    "Service";
 
                 const time =
-                    service.estimatedServiceTime || 5;
+                    service.estimatedServiceTime ||
+                    5;
 
                 return `
                     <button
                         class="service-option"
-                        onclick="selectService(${id}, '${escapeText(name)}')">
+                        onclick="selectService(
+                            ${id},
+                            '${escapeText(name)}'
+                        )"
+                    >
 
                         <div>
-                            <strong>${name}</strong>
+
+                            <strong>
+                                ${name}
+                            </strong>
+
                             <small>
-                                Estimated time: ${time} min
+                                Estimated time:
+                                ${time} min
                             </small>
+
                         </div>
 
                         <span>→</span>
@@ -338,7 +495,10 @@ async function loadServices(organizationId) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Service loading error:",
+            error
+        );
 
         serviceList.innerHTML = `
             <p>Unable to load services.</p>
@@ -349,35 +509,64 @@ async function loadServices(organizationId) {
 
 // ================= SELECT SERVICE =================
 
-function selectService(serviceId, serviceName) {
+function selectService(
+    serviceId,
+    serviceName
+) {
 
-    selectedService = serviceId;
+    selectedService =
+        serviceId;
 
-    document.getElementById("selectedService").textContent =
-        serviceName;
+    const selectedServiceElement =
+        document.getElementById(
+            "selectedService"
+        );
 
-    closeModal("organizationModal");
+    if (selectedServiceElement) {
 
-    document.getElementById("joinModal")
-        .classList.add("active");
+        selectedServiceElement.textContent =
+            serviceName;
+    }
+
+    closeModal(
+        "organizationModal"
+    );
+
+    document.getElementById(
+        "joinModal"
+    )?.classList.add("active");
 }
 
 
 // ================= NOTIFICATION =================
 
-function selectNotification(method, button) {
+function selectNotification(
+    method,
+    button
+) {
 
-    selectedNotificationMethod = method;
+    selectedNotificationMethod =
+        method;
 
-    document.querySelectorAll(".notification-option")
-        .forEach(btn => btn.classList.remove("selected"));
+    document.querySelectorAll(
+        ".notification-option"
+    ).forEach(btn => {
+
+        btn.classList.remove(
+            "selected"
+        );
+    });
 
     if (button) {
-        button.classList.add("selected");
+        button.classList.add(
+            "selected"
+        );
     }
 
     const contact =
-        document.getElementById("contact");
+        document.getElementById(
+            "contact"
+        );
 
     if (!contact) return;
 
@@ -385,11 +574,6 @@ function selectNotification(method, button) {
 
         contact.placeholder =
             "Enter email address";
-
-    } else if (method === "SMS") {
-
-        contact.placeholder =
-            "Enter mobile number";
 
     } else {
 
@@ -404,63 +588,74 @@ function selectNotification(method, button) {
 async function joinQueue() {
 
     const customerName =
-        document.getElementById("customerName").value.trim();
+        document.getElementById(
+            "customerName"
+        )?.value.trim();
 
     const contact =
-        document.getElementById("contact").value.trim();
+        document.getElementById(
+            "contact"
+        )?.value.trim();
 
     if (!customerName) {
-        alert("Please enter your name.");
+
+        alert(
+            "Please enter your name."
+        );
+
         return;
     }
 
     if (!contact) {
-        alert("Please enter your contact.");
+
+        alert(
+            "Please enter your contact."
+        );
+
         return;
     }
 
     if (!selectedOrganization) {
-        alert("Please select an organization.");
+
+        alert(
+            "Please select an organization."
+        );
+
         return;
     }
 
     if (!selectedService) {
-        alert("Please select a service.");
+
+        alert(
+            "Please select a service."
+        );
+
         return;
     }
 
     const organizationId =
-        selectedOrganization.organizationId ||
+        selectedOrganization.organizationId ??
         selectedOrganization.id;
 
-    const data = {
-
-        customerName: customerName,
-
-        contact: contact,
-
-        notificationMethod:
-            selectedNotificationMethod,
-
-        organizationId:
-            organizationId,
-
-        serviceId:
-            selectedService
-    };
+    const url =
+        `${API_BASE}/queue/take?` +
+        `customerName=${encodeURIComponent(customerName)}` +
+        `&contact=${encodeURIComponent(contact)}` +
+        `&notificationMethod=${encodeURIComponent(selectedNotificationMethod)}` +
+        `&organizationId=${organizationId}` +
+        `&serviceId=${selectedService}` +
+        `&customerId=1`;
 
     try {
 
+        console.log(
+            "Joining queue:",
+            url
+        );
+
         const response =
-            await fetch(`${API_BASE}/queue/take`, {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(data)
+            await fetch(url, {
+                method: "GET"
             });
 
         if (!response.ok) {
@@ -468,23 +663,40 @@ async function joinQueue() {
             const message =
                 await response.text();
 
-            throw new Error(message);
+            console.error(
+                "Queue error:",
+                message
+            );
+
+            throw new Error(
+                message
+            );
         }
 
         const token =
             await response.json();
 
-        closeModal("joinModal");
+        console.log(
+            "Token received:",
+            token
+        );
+
+        closeModal(
+            "joinModal"
+        );
 
         displayToken(token);
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Join Queue Error:",
+            error
+        );
 
         alert(
             "Unable to join queue.\n\n" +
-            "Make sure the selected organization and service are available."
+            "Please check the Spring Boot server."
         );
     }
 }
@@ -494,67 +706,302 @@ async function joinQueue() {
 
 function displayToken(data) {
 
-    document.getElementById("tokenNumber").textContent =
-        "#" + (data.tokenNumber ?? "--");
+    const tokenNumber =
+        data.tokenNumber ??
+        data.token_number ??
+        "--";
 
-    document.getElementById("tokenPosition").textContent =
-        data.queuePosition ?? "--";
+    const queuePosition =
+        data.queuePosition ??
+        data.queue_position ??
+        "--";
 
-    document.getElementById("tokenWait").textContent =
-        (data.estimatedWaitingTime ?? "--") + " min";
+    const waitTime =
+        data.estimatedWaitingTime ??
+        data.estimated_waiting_time ??
+        "--";
 
-    document.getElementById("queueToken").textContent =
-        "#" + (data.tokenNumber ?? "--");
 
-    document.getElementById("queuePosition").textContent =
-        data.queuePosition ?? "--";
+    // TOKEN MODAL
 
-    document.getElementById("queueWait").textContent =
-        (data.estimatedWaitingTime ?? "--") + " min";
+    const tokenNumberElement =
+        document.getElementById(
+            "tokenNumber"
+        );
 
-    document.getElementById("activeOrg").textContent =
-        selectedOrganization?.organizationName ||
-        "QueueEase";
+    if (tokenNumberElement) {
 
-    document.getElementById("activeToken").textContent =
-        "#" + (data.tokenNumber ?? "--");
+        tokenNumberElement.textContent =
+            "#" + tokenNumber;
+    }
 
-    document.getElementById("activePosition").textContent =
-        data.queuePosition ?? "--";
+    const tokenPositionElement =
+        document.getElementById(
+            "tokenPosition"
+        );
 
-    document.getElementById("activeWait").textContent =
-        (data.estimatedWaitingTime ?? "--") + " min";
+    if (tokenPositionElement) {
 
-    document.getElementById("activeTicket")
-        ?.classList.remove("hidden");
+        tokenPositionElement.textContent =
+            queuePosition;
+    }
+
+    const tokenWaitElement =
+        document.getElementById(
+            "tokenWait"
+        );
+
+    if (tokenWaitElement) {
+
+        tokenWaitElement.textContent =
+            waitTime + " min";
+    }
+
+
+    // MY QUEUE
+
+    const queueToken =
+        document.getElementById(
+            "queueToken"
+        );
+
+    if (queueToken) {
+
+        queueToken.textContent =
+            "#" + tokenNumber;
+    }
+
+    const queuePositionElement =
+        document.getElementById(
+            "queuePosition"
+        );
+
+    if (queuePositionElement) {
+
+        queuePositionElement.textContent =
+            queuePosition;
+    }
+
+    const queueWait =
+        document.getElementById(
+            "queueWait"
+        );
+
+    if (queueWait) {
+
+        queueWait.textContent =
+            waitTime + " min";
+    }
+
+
+    // ACTIVE TICKET
+
+    const activeOrganization =
+        document.getElementById(
+            "activeOrganization"
+        );
+
+    if (activeOrganization) {
+
+        activeOrganization.textContent =
+            selectedOrganization?.organizationName ||
+            data.organizationName ||
+            "QueueEase";
+    }
+
+    const activeTokenNumber =
+        document.getElementById(
+            "activeTokenNumber"
+        );
+
+    if (activeTokenNumber) {
+
+        activeTokenNumber.textContent =
+            "#" + tokenNumber;
+    }
+
+    const activePosition =
+        document.getElementById(
+            "activePosition"
+        );
+
+    if (activePosition) {
+
+        activePosition.textContent =
+            queuePosition;
+    }
+
+    const activeWait =
+        document.getElementById(
+            "activeWait"
+        );
+
+    if (activeWait) {
+
+        activeWait.textContent =
+            waitTime + " min";
+    }
+
+    document.getElementById(
+        "activeTicket"
+    )?.classList.remove(
+        "hidden"
+    );
+
+
+    // PEOPLE AHEAD
 
     const ahead =
         Math.max(
             0,
-            (data.queuePosition || 1) - 1
+            Number(queuePosition) - 1
         );
 
-    document.getElementById("peopleAhead").textContent =
-        ahead + " people ahead";
+    const peopleAhead =
+        document.getElementById(
+            "peopleAhead"
+        );
 
-    document.getElementById("queueProgress").style.width =
-        Math.max(
-            5,
-            Math.min(
-                100,
-                100 / (data.queuePosition || 1)
-            )
-        ) + "%";
+    if (peopleAhead) {
 
-    document.getElementById("notificationMessage").textContent =
-        "🔔 Queue updates enabled";
+        peopleAhead.textContent =
+            ahead +
+            " people ahead";
+    }
 
-    document.getElementById("tokenModal")
-        .classList.add("active");
+
+    // PROGRESS
+
+    const progress =
+        document.getElementById(
+            "queueProgress"
+        );
+
+    if (progress) {
+
+        progress.style.width =
+            Math.max(
+                5,
+                Math.min(
+                    100,
+                    100 /
+                    Number(
+                        queuePosition || 1
+                    )
+                )
+            ) + "%";
+    }
+
+
+    // NOTIFICATION
+
+    const notificationMessage =
+        document.getElementById(
+            "notificationMessage"
+        );
+
+    if (notificationMessage) {
+
+        notificationMessage.textContent =
+            "🔔 Queue updates enabled";
+    }
+
+
+    // SAVE TOKEN
 
     localStorage.setItem(
         "queueEaseToken",
         JSON.stringify(data)
+    );
+
+
+    // ================= REAL QR CODE =================
+
+    const qrCode =
+        document.getElementById(
+            "qrCode"
+        );
+
+    if (
+        qrCode &&
+        tokenNumber !== "--"
+    ) {
+
+        qrCode.innerHTML = "";
+
+        const basePath =
+            window.location.pathname.substring(
+                0,
+                window.location.pathname.lastIndexOf("/") + 1
+            );
+
+        const liveQueueURL =
+            window.location.origin +
+            basePath +
+            "live-queue.html?token=" +
+            encodeURIComponent(
+                tokenNumber
+            );
+
+        console.log(
+            "REAL QR URL:",
+            liveQueueURL
+        );
+
+
+        // Use QRCode library from index.html
+
+        if (
+            typeof QRCode !== "undefined"
+        ) {
+
+            new QRCode(
+                qrCode,
+                {
+                    text: liveQueueURL,
+
+                    width: 260,
+
+                    height: 260,
+
+                    colorDark: "#000000",
+
+                    colorLight: "#ffffff",
+
+                    correctLevel:
+                        QRCode.CorrectLevel.H
+                }
+            );
+
+        } else {
+
+            console.error(
+                "QRCode library not loaded."
+            );
+
+            qrCode.innerHTML = `
+                <div
+                    style="
+                        color:#000;
+                        background:#fff;
+                        padding:20px;
+                        border-radius:10px;
+                        text-align:center;
+                    "
+                >
+                    QR Code unavailable
+                </div>
+            `;
+        }
+    }
+
+
+    // OPEN TOKEN MODAL
+
+    document.getElementById(
+        "tokenModal"
+    )?.classList.add(
+        "active"
     );
 }
 
@@ -564,36 +1011,65 @@ function displayToken(data) {
 async function refreshQueue() {
 
     const saved =
-        localStorage.getItem("queueEaseToken");
+        localStorage.getItem(
+            "queueEaseToken"
+        );
 
     if (!saved) return;
 
-    const oldData =
-        JSON.parse(saved);
+    let oldData;
+
+    try {
+
+        oldData =
+            JSON.parse(saved);
+
+    } catch (error) {
+
+        console.error(
+            "Saved token error:",
+            error
+        );
+
+        return;
+    }
 
     try {
 
         const response =
-            await fetch(`${API_BASE}/queue/all`);
+            await fetch(
+                `${API_BASE}/queue/all`
+            );
 
         if (!response.ok) return;
 
         const tokens =
             await response.json();
 
+        const oldTokenNumber =
+            oldData.tokenNumber ??
+            oldData.token_number;
+
         const current =
             tokens.find(token =>
-                token.tokenNumber ==
-                oldData.tokenNumber
+                (
+                    token.tokenNumber ??
+                    token.token_number
+                ) == oldTokenNumber
             );
 
         if (!current) return;
 
-        displayQueueData(current);
+        displayQueueData(
+            current
+        );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Refresh queue error:",
+            error
+        );
     }
 }
 
@@ -602,32 +1078,144 @@ async function refreshQueue() {
 
 function displayQueueData(data) {
 
-    document.getElementById("queueToken").textContent =
-        "#" + data.tokenNumber;
+    const tokenNumber =
+        data.tokenNumber ??
+        data.token_number;
 
-    document.getElementById("queuePosition").textContent =
-        data.queuePosition;
+    const queuePosition =
+        data.queuePosition ??
+        data.queue_position;
 
-    document.getElementById("queueWait").textContent =
-        data.estimatedWaitingTime + " min";
+    const waitTime =
+        data.estimatedWaitingTime ??
+        data.estimated_waiting_time;
+
+
+    const queueToken =
+        document.getElementById(
+            "queueToken"
+        );
+
+    if (queueToken) {
+
+        queueToken.textContent =
+            "#" + tokenNumber;
+    }
+
+
+    const queuePositionElement =
+        document.getElementById(
+            "queuePosition"
+        );
+
+    if (queuePositionElement) {
+
+        queuePositionElement.textContent =
+            queuePosition;
+    }
+
+
+    const queueWait =
+        document.getElementById(
+            "queueWait"
+        );
+
+    if (queueWait) {
+
+        queueWait.textContent =
+            waitTime + " min";
+    }
+
 
     const ahead =
         Math.max(
             0,
-            data.queuePosition - 1
+            Number(queuePosition) - 1
         );
 
-    document.getElementById("peopleAhead").textContent =
-        ahead + " people ahead";
+    const peopleAhead =
+        document.getElementById(
+            "peopleAhead"
+        );
 
-    document.getElementById("activeToken").textContent =
-        "#" + data.tokenNumber;
+    if (peopleAhead) {
 
-    document.getElementById("activePosition").textContent =
-        data.queuePosition;
+        peopleAhead.textContent =
+            ahead +
+            " people ahead";
+    }
 
-    document.getElementById("activeWait").textContent =
-        data.estimatedWaitingTime + " min";
+
+    const progress =
+        document.getElementById(
+            "queueProgress"
+        );
+
+    if (progress) {
+
+        progress.style.width =
+            Math.max(
+                5,
+                Math.min(
+                    100,
+                    100 /
+                    Number(
+                        queuePosition || 1
+                    )
+                )
+            ) + "%";
+    }
+
+
+    const activeTokenNumber =
+        document.getElementById(
+            "activeTokenNumber"
+        );
+
+    if (activeTokenNumber) {
+
+        activeTokenNumber.textContent =
+            "#" + tokenNumber;
+    }
+
+
+    const activePosition =
+        document.getElementById(
+            "activePosition"
+        );
+
+    if (activePosition) {
+
+        activePosition.textContent =
+            queuePosition;
+    }
+
+
+    const activeWait =
+        document.getElementById(
+            "activeWait"
+        );
+
+    if (activeWait) {
+
+        activeWait.textContent =
+            waitTime + " min";
+    }
+
+
+    const activeOrganization =
+        document.getElementById(
+            "activeOrganization"
+        );
+
+    if (
+        activeOrganization &&
+        data.organizationName
+    ) {
+
+        activeOrganization.textContent =
+            data.organizationName;
+    }
 }
 
 
@@ -639,10 +1227,16 @@ function closeModal(id) {
         document.getElementById(id);
 
     if (modal) {
-        modal.classList.remove("active");
+
+        modal.classList.remove(
+            "active"
+        );
     }
 
-    if (id === "scannerModal") {
+    if (
+        id === "scannerModal"
+    ) {
+
         stopScanner();
     }
 }
@@ -651,67 +1245,289 @@ function closeModal(id) {
 // ================= QR SCANNER =================
 
 let scannerStream = null;
+let scannerRunning = false;
+
 
 async function openScanner() {
 
     const modal =
-        document.getElementById("scannerModal");
+        document.getElementById(
+            "scannerModal"
+        );
 
     if (!modal) return;
 
-    modal.classList.add("active");
+    modal.classList.add(
+        "active"
+    );
+
 
     const video =
-        document.getElementById("scannerVideo");
+        document.getElementById(
+            "scannerVideo"
+        );
+
+    const message =
+        document.getElementById(
+            "scannerMessage"
+        );
+
+    if (!video) return;
+
 
     try {
 
-        scannerStream =
-            await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: "environment"
-                }
+        if (
+            !("BarcodeDetector" in window)
+        ) {
+
+            if (message) {
+
+                message.textContent =
+                    "QR scanner is not supported in this browser.";
+            }
+
+            return;
+        }
+
+
+        const detector =
+            new BarcodeDetector({
+                formats: ["qr_code"]
             });
+
+
+        scannerStream =
+            await navigator.mediaDevices
+                .getUserMedia({
+
+                    video: {
+
+                        facingMode: {
+                            ideal: "environment"
+                        },
+
+                        width: {
+                            ideal: 1280
+                        },
+
+                        height: {
+                            ideal: 720
+                        }
+                    },
+
+                    audio: false
+                });
+
 
         video.srcObject =
             scannerStream;
 
-        document.getElementById("scannerMessage")
-            .textContent =
-            "Camera active. Point it at a QueueEase QR code.";
+        await video.play();
+
+        scannerRunning = true;
+
+
+        if (message) {
+
+            message.textContent =
+                "Camera active. Point it at a QueueEase QR code.";
+        }
+
+
+        scanQRCode(
+            detector,
+            video
+        );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Scanner error:",
+            error
+        );
 
-        document.getElementById("scannerMessage")
-            .textContent =
-            "Camera permission was not available.";
+        if (message) {
+
+            message.textContent =
+                "Camera permission was not available.";
+        }
+
+        stopScanner();
     }
 }
 
+
+// ================= SCAN QR CODE =================
+
+async function scanQRCode(
+    detector,
+    video
+) {
+
+    if (!scannerRunning) {
+        return;
+    }
+
+    try {
+
+        const barcodes =
+            await detector.detect(
+                video
+            );
+
+
+        if (
+            barcodes.length > 0
+        ) {
+
+            const qrData =
+                barcodes[0].rawValue;
+
+            console.log(
+                "QR Code detected:",
+                qrData
+            );
+
+
+            scannerRunning =
+                false;
+
+            stopScanner();
+
+
+            // FULL URL
+
+            if (
+                qrData.startsWith(
+                    "http://"
+                ) ||
+                qrData.startsWith(
+                    "https://"
+                )
+            ) {
+
+                window.location.href =
+                    qrData;
+
+                return;
+            }
+
+
+            // TOKEN NUMBER ONLY
+
+            const tokenNumber =
+                qrData.match(
+                    /\d+/
+                );
+
+
+            if (tokenNumber) {
+
+                const basePath =
+                    window.location.pathname.substring(
+                        0,
+                        window.location.pathname.lastIndexOf("/") + 1
+                    );
+
+                window.location.href =
+                    window.location.origin +
+                    basePath +
+                    "live-queue.html?token=" +
+                    encodeURIComponent(
+                        tokenNumber[0]
+                    );
+
+                return;
+            }
+
+
+            const message =
+                document.getElementById(
+                    "scannerMessage"
+                );
+
+            if (message) {
+
+                message.textContent =
+                    "Invalid QueueEase QR code.";
+            }
+
+            return;
+        }
+
+    } catch (error) {
+
+        console.log(
+            "QR detection:",
+            error
+        );
+    }
+
+
+    if (scannerRunning) {
+
+        requestAnimationFrame(() => {
+
+            scanQRCode(
+                detector,
+                video
+            );
+
+        });
+    }
+}
+
+
+// ================= CLOSE SCANNER =================
 
 function closeScanner() {
 
-    closeModal("scannerModal");
+    scannerRunning =
+        false;
+
+    stopScanner();
+
+    closeModal(
+        "scannerModal"
+    );
 }
 
 
+// ================= STOP SCANNER =================
+
 function stopScanner() {
+
+    scannerRunning =
+        false;
+
 
     if (scannerStream) {
 
-        scannerStream.getTracks()
-            .forEach(track => track.stop());
+        scannerStream
+            .getTracks()
+            .forEach(track => {
 
-        scannerStream = null;
+                track.stop();
+
+            });
+
+        scannerStream =
+            null;
     }
 
+
     const video =
-        document.getElementById("scannerVideo");
+        document.getElementById(
+            "scannerVideo"
+        );
 
     if (video) {
-        video.srcObject = null;
+
+        video.pause();
+
+        video.srcObject =
+            null;
     }
 }
 
@@ -721,72 +1537,187 @@ function stopScanner() {
 function escapeText(text) {
 
     return String(text)
-        .replace(/'/g, "\\'")
-        .replace(/"/g, "&quot;");
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        );
 }
 
 
 // ================= INITIALIZE =================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    showSection("home");
+        showSection(
+            "home"
+        );
 
-    loadOrganizations();
+        loadOrganizations();
 
-    const saved =
-        localStorage.getItem("queueEaseToken");
 
-    if (saved) {
+        const saved =
+            localStorage.getItem(
+                "queueEaseToken"
+            );
 
-        try {
 
-            const data =
-                JSON.parse(saved);
+        if (saved) {
 
-            if (data) {
-                displayTokenDataWithoutModal(data);
+            try {
+
+                const data =
+                    JSON.parse(
+                        saved
+                    );
+
+                if (data) {
+
+                    displayTokenDataWithoutModal(
+                        data
+                    );
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Token restore error:",
+                    error
+                );
             }
-
-        } catch (error) {
-            console.error(error);
         }
     }
-});
+);
 
 
-function displayTokenDataWithoutModal(data) {
+// ================= RESTORE ACTIVE TOKEN =================
 
-    document.getElementById("activeTicket")
-        ?.classList.remove("hidden");
+function displayTokenDataWithoutModal(
+    data
+) {
 
-    document.getElementById("activeToken").textContent =
-        "#" + (data.tokenNumber ?? "--");
+    const tokenNumber =
+        data.tokenNumber ??
+        data.token_number ??
+        "--";
 
-    document.getElementById("activePosition").textContent =
-        data.queuePosition ?? "--";
+    const queuePosition =
+        data.queuePosition ??
+        data.queue_position ??
+        "--";
 
-    document.getElementById("activeWait").textContent =
-        (data.estimatedWaitingTime ?? "--") + " min";
+    const waitTime =
+        data.estimatedWaitingTime ??
+        data.estimated_waiting_time ??
+        "--";
 
-    document.getElementById("activeOrg").textContent =
-        selectedOrganization?.organizationName ||
-        "QueueEase";
+
+    document.getElementById(
+        "activeTicket"
+    )?.classList.remove(
+        "hidden"
+    );
+
+
+    const activeTokenNumber =
+        document.getElementById(
+            "activeTokenNumber"
+        );
+
+    if (activeTokenNumber) {
+
+        activeTokenNumber.textContent =
+            "#" + tokenNumber;
+    }
+
+
+    const activePosition =
+        document.getElementById(
+            "activePosition"
+        );
+
+    if (activePosition) {
+
+        activePosition.textContent =
+            queuePosition;
+    }
+
+
+    const activeWait =
+        document.getElementById(
+            "activeWait"
+        );
+
+    if (activeWait) {
+
+        activeWait.textContent =
+            waitTime + " min";
+    }
+
+
+    const activeOrganization =
+        document.getElementById(
+            "activeOrganization"
+        );
+
+    if (activeOrganization) {
+
+        activeOrganization.textContent =
+            data.organizationName ||
+            "QueueEase";
+    }
 }
 
 
-// ================= MAKE FUNCTIONS AVAILABLE TO HTML =================
+// ================= HTML FUNCTIONS =================
 
-window.showSection = showSection;
-window.selectCategory = selectCategory;
-window.loadOrganizations = loadOrganizations;
-window.searchOrganizations = searchOrganizations;
-window.openOrganization = openOrganization;
-window.selectService = selectService;
-window.selectNotification = selectNotification;
-window.joinQueue = joinQueue;
-window.refreshQueue = refreshQueue;
-window.displayToken = displayToken;
-window.closeModal = closeModal;
-window.openScanner = openScanner;
-window.closeScanner = closeScanner;
+window.showSection =
+    showSection;
+
+window.selectCategory =
+    selectCategory;
+
+window.loadOrganizations =
+    loadOrganizations;
+
+window.searchOrganizations =
+    searchOrganizations;
+
+window.openOrganization =
+    openOrganization;
+
+window.loadServices =
+    loadServices;
+
+window.selectService =
+    selectService;
+
+window.selectNotification =
+    selectNotification;
+
+window.joinQueue =
+    joinQueue;
+
+window.refreshQueue =
+    refreshQueue;
+
+window.displayToken =
+    displayToken;
+
+window.closeModal =
+    closeModal;
+
+window.openScanner =
+    openScanner;
+
+window.closeScanner =
+    closeScanner;

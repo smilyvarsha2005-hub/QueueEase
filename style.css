@@ -2474,4 +2474,12 @@ main::after,
 #scannerModal * {
     pointer-events: auto;
 }
+.queueease-real-qr {
+    display: block;
+    width: 260px;
+    height: 260px;
+    object-fit: contain;
+    background: #ffffff;
+    margin: 0 auto;
+}
 }

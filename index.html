@@ -4,28 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          crossorigin=""/>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            crossorigin=""></script>
-
     <title>QueueEase - Smart Queue Management</title>
 
-    <!-- BLACK + GOLD THEME -->
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+    <!-- Black + Gold Theme -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="topbar">
 
     <div class="brand">
 
-        <div class="brand-icon">Q</div>
+        <div class="brand-icon">
+            Q
+        </div>
 
         <div>
             <h2>QueueEase</h2>
@@ -36,12 +40,20 @@
 
     <div class="header-actions">
 
-        <button class="icon-btn" onclick="openScanner()">
+        <button
+            class="icon-btn"
+            onclick="openScanner()"
+            title="Scan QR"
+        >
             📷
         </button>
 
-        <button class="profile-btn"
-                onclick="showSection('profile')">
+        <button
+            class="profile-btn"
+            onclick="showSection('profile')"
+            title="Profile"
+            type="button"
+        >
             👤
         </button>
 
@@ -50,13 +62,21 @@
 </header>
 
 
-<!-- ================= MAIN ================= -->
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <main>
 
-<!-- ================= HOME ================= -->
 
-<section id="homeSection" class="section active">
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<section
+    id="homeSection"
+    class="section active"
+>
 
     <div class="welcome">
 
@@ -76,7 +96,7 @@
     </div>
 
 
-    <!-- ================= SEARCH ================= -->
+    <!-- SEARCH -->
 
     <div class="search-box">
 
@@ -89,25 +109,35 @@
             onkeyup="searchOrganizations()"
         >
 
-        <button onclick="openScanner()">
+        <button
+            onclick="openScanner()"
+            title="Scan QR"
+            type="button"
+        >
             📷
         </button>
 
     </div>
 
 
-    <!-- ================= ACTIVE TICKET ================= -->
+    <!-- =================================================
+         ACTIVE TICKET
+    ================================================= -->
 
-    <div id="activeTicket"
-         class="active-ticket hidden">
+    <div
+        id="activeTicket"
+        class="active-ticket hidden"
+    >
 
         <div class="ticket-top">
 
             <div>
 
-                <span>ACTIVE QUEUE</span>
+                <span>
+                    ACTIVE QUEUE
+                </span>
 
-                <h3 id="activeOrg">
+                <h3 id="activeOrganization">
                     QueueEase
                 </h3>
 
@@ -126,7 +156,7 @@
                 Your Token
             </small>
 
-            <strong id="activeToken">
+            <strong id="activeTokenNumber">
                 #--
             </strong>
 
@@ -165,92 +195,234 @@
 
         <button
             onclick="showSection('queue')"
-            class="light-button">
-
+            class="light-button"
+            type="button"
+        >
             View Queue →
-
         </button>
 
     </div>
 
 
-    <!-- ================= CATEGORIES ================= -->
+    <!-- =================================================
+         CATEGORIES
+    ================================================= -->
 
-    
-        
-           <div class="category-grid" id="categoryGrid">
+    <div
+        class="category-grid"
+        id="categoryGrid"
+    >
 
-    <button class="category-card" onclick="selectCategory('Hospital')">
-        <div class="category-icon">🏥</div>
-        <h3>Health</h3>
-        <p>Hospitals & healthcare</p>
-    </button>
+        <button
+            class="category-card"
+            onclick="selectCategory('Hospital')"
+            type="button"
+        >
 
-    <button class="category-card" onclick="selectCategory('College')">
-        <div class="category-icon">🎓</div>
-        <h3>College</h3>
-        <p>Education & campus</p>
-    </button>
+            <div class="category-icon">
+                🏥
+            </div>
 
-    <button class="category-card" onclick="selectCategory('Salon')">
-        <div class="category-icon">💇</div>
-        <h3>Salon</h3>
-        <p>Beauty & grooming</p>
-    </button>
+            <h3>
+                Health
+            </h3>
 
-    <button class="category-card" onclick="selectCategory('Restaurant')">
-        <div class="category-icon">🍽️</div>
-        <h3>Food</h3>
-        <p>Restaurants & dining</p>
-    </button>
+            <p>
+                Hospitals & healthcare
+            </p>
 
-    <button class="category-card" onclick="selectCategory('Bank')">
-        <div class="category-icon">🏦</div>
-        <h3>Bank</h3>
-        <p>Banking services</p>
-    </button>
+        </button>
 
-    <button class="category-card" onclick="selectCategory('Service Center')">
-        <div class="category-icon">🔧</div>
-        <h3>Service</h3>
-        <p>Repairs & services</p>
-    </button>
 
-    <button class="category-card" onclick="selectCategory('Rental')">
-        <div class="category-icon">🚗</div>
-        <h3>Rental</h3>
-        <p>Bike & car rental</p>
-    </button>
+        <button
+            class="category-card"
+            onclick="selectCategory('College')"
+            type="button"
+        >
 
-    <button class="category-card" onclick="selectCategory('Government')">
-        <div class="category-icon">🏛️</div>
-        <h3>Govt</h3>
-        <p>Public services</p>
-    </button>
+            <div class="category-icon">
+                🎓
+            </div>
 
-</div>
+            <h3>
+                College
+            </h3>
+
+            <p>
+                Education & campus
+            </p>
+
+        </button>
+
+
+        <button
+            class="category-card"
+            onclick="selectCategory('Salon')"
+            type="button"
+        >
+
+            <div class="category-icon">
+                💇
+            </div>
+
+            <h3>
+                Salon
+            </h3>
+
+            <p>
+                Beauty & grooming
+            </p>
+
+        </button>
+
+
+        <button
+            class="category-card"
+            onclick="selectCategory('Restaurant')"
+            type="button"
+        >
+
+            <div class="category-icon">
+                🍽️
+            </div>
+
+            <h3>
+                Food
+            </h3>
+
+            <p>
+                Restaurants & dining
+            </p>
+
+        </button>
+
+
+        <button
+            class="category-card"
+            onclick="selectCategory('Bank')"
+            type="button"
+        >
+
+            <div class="category-icon">
+                🏦
+            </div>
+
+            <h3>
+                Bank
+            </h3>
+
+            <p>
+                Banking services
+            </p>
+
+        </button>
+
+
+        <button
+            class="category-card"
+            onclick="selectCategory('Service Center')"
+            type="button"
+        >
+
+            <div class="category-icon">
+                🔧
+            </div>
+
+            <h3>
+                Service
+            </h3>
+
+            <p>
+                Repairs & services
+            </p>
+
+        </button>
+
+
+        <button
+            class="category-card"
+            onclick="selectCategory('Rental')"
+            type="button"
+        >
+
+            <div class="category-icon">
+                🚗
+            </div>
+
+            <h3>
+                Rental
+            </h3>
+
+            <p>
+                Bike & car rental
+            </p>
+
+        </button>
+
+
+        <button
+            class="category-card"
+            onclick="selectCategory('Government')"
+            type="button"
+        >
+
+            <div class="category-icon">
+                🏛️
+            </div>
+
+            <h3>
+                Govt
+            </h3>
+
+            <p>
+                Public services
+            </p>
+
+        </button>
+
+    </div>
 
 </section>
-<!-- ================= DISCOVER ================= -->
 
-<section id="discoverSection" class="section">
+
+<!-- =====================================================
+     DISCOVER
+===================================================== -->
+
+<section
+    id="discoverSection"
+    class="section"
+>
 
     <div class="page-title">
 
-        <button onclick="showSection('home')">
+        <button
+            onclick="showSection('home')"
+            type="button"
+        >
             ←
         </button>
 
         <div>
-            <h1>Discover</h1>
-            <p>Find organizations and services</p>
+
+            <h1>
+                Discover
+            </h1>
+
+            <p>
+                Find organizations and services
+            </p>
+
         </div>
 
     </div>
 
+
     <div class="search-box">
 
-        <span>🔍</span>
+        <span>
+            🔍
+        </span>
 
         <input
             type="text"
@@ -261,25 +433,38 @@
 
     </div>
 
+
     <div
         id="discoverCategories"
-        class="discover-categories">
+        class="discover-categories"
+    >
     </div>
+
 
     <div
         id="discoverList"
-        class="organization-list">
+        class="organization-list"
+    >
     </div>
 
 </section>
-<!-- ================= QUEUE ================= -->
 
-<section id="queueSection"
-         class="section">
+
+<!-- =====================================================
+     MY QUEUE
+===================================================== -->
+
+<section
+    id="queueSection"
+    class="section"
+>
 
     <div class="page-title">
 
-        <button onclick="showSection('home')">
+        <button
+            onclick="showSection('home')"
+            type="button"
+        >
             ←
         </button>
 
@@ -298,8 +483,10 @@
     </div>
 
 
-    <div id="queueTicket"
-         class="large-ticket">
+    <div
+        id="queueTicket"
+        class="large-ticket"
+    >
 
         <div class="ticket-status">
             ● LIVE QUEUE
@@ -365,7 +552,8 @@
 
                 <div
                     id="queueProgress"
-                    class="progress">
+                    class="progress"
+                >
                 </div>
 
             </div>
@@ -394,10 +582,10 @@
 
         <button
             onclick="refreshQueue()"
-            class="primary-button">
-
+            class="primary-button"
+            type="button"
+        >
             🔄 Refresh Queue
-
         </button>
 
     </div>
@@ -405,14 +593,21 @@
 </section>
 
 
-<!-- ================= PROFILE ================= -->
+<!-- =====================================================
+     PROFILE
+===================================================== -->
 
-<section id="profileSection"
-         class="section">
+<section
+    id="profileSection"
+    class="section"
+>
 
     <div class="page-title">
 
-        <button onclick="showSection('home')">
+        <button
+            onclick="showSection('home')"
+            type="button"
+        >
             ←
         </button>
 
@@ -450,9 +645,14 @@
 
     <div class="settings-list">
 
-        <button>
+        <button
+            type="button"
+            onclick="showSection('personal')"
+        >
 
-            👤 Personal Information
+            <span>
+                👤 Personal Information
+            </span>
 
             <span>
                 ›
@@ -461,9 +661,14 @@
         </button>
 
 
-        <button>
+        <button
+            type="button"
+            onclick="showSection('history')"
+        >
 
-            🎫 Queue History
+            <span>
+                🎫 Queue History
+            </span>
 
             <span>
                 ›
@@ -472,9 +677,14 @@
         </button>
 
 
-        <button>
+        <button
+            type="button"
+            onclick="showSection('notifications')"
+        >
 
-            🔔 Notifications
+            <span>
+                🔔 Notifications
+            </span>
 
             <span>
                 ›
@@ -483,9 +693,14 @@
         </button>
 
 
-        <button>
+        <button
+            type="button"
+            onclick="showSection('settings')"
+        >
 
-            ⚙️ Settings
+            <span>
+                ⚙️ Settings
+            </span>
 
             <span>
                 ›
@@ -497,22 +712,367 @@
 
 </section>
 
+
+<!-- =====================================================
+     PERSONAL INFORMATION
+===================================================== -->
+
+<section
+    id="personalSection"
+    class="section"
+>
+
+    <div class="page-title">
+
+        <button
+            onclick="showSection('profile')"
+            type="button"
+        >
+            ←
+        </button>
+
+        <div>
+
+            <h1>
+                Personal Information
+            </h1>
+
+            <p>
+                Your QueueEase account details
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-card">
+
+        <div class="profile-avatar">
+            V
+        </div>
+
+        <h2>
+            Varsha
+        </h2>
+
+        <p>
+            QueueEase member
+        </p>
+
+    </div>
+
+
+    <div class="settings-list">
+
+        <button type="button">
+
+            <span>
+                👤 Name
+            </span>
+
+            <span>
+                Varsha
+            </span>
+
+        </button>
+
+
+        <button type="button">
+
+            <span>
+                📧 Email
+            </span>
+
+            <span>
+                Not added
+            </span>
+
+        </button>
+
+
+        <button type="button">
+
+            <span>
+                📱 Phone
+            </span>
+
+            <span>
+                Not added
+            </span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUEUE HISTORY
+===================================================== -->
+
+<section
+    id="historySection"
+    class="section"
+>
+
+    <div class="page-title">
+
+        <button
+            onclick="showSection('profile')"
+            type="button"
+        >
+            ←
+        </button>
+
+        <div>
+
+            <h1>
+                Queue History
+            </h1>
+
+            <p>
+                Your previous QueueEase visits
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-card">
+
+        <div class="profile-avatar">
+            🎫
+        </div>
+
+        <h2>
+            Queue History
+        </h2>
+
+        <p>
+            No previous queue history yet.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     NOTIFICATIONS
+===================================================== -->
+
+<section
+    id="notificationsSection"
+    class="section"
+>
+
+    <div class="page-title">
+
+        <button
+            onclick="showSection('profile')"
+            type="button"
+        >
+            ←
+        </button>
+
+        <div>
+
+            <h1>
+                Notifications
+            </h1>
+
+            <p>
+                Manage your QueueEase notifications
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-list">
+
+        <button type="button">
+
+            <span>
+                🔔 Queue Updates
+            </span>
+
+            <span>
+                ON
+            </span>
+
+        </button>
+
+
+        <button type="button">
+
+            <span>
+                🎫 Token Updates
+            </span>
+
+            <span>
+                ON
+            </span>
+
+        </button>
+
+
+        <button type="button">
+
+            <span>
+                ⏰ Turn Reminder
+            </span>
+
+            <span>
+                ON
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <div class="notification-box">
+
+        🔔
+
+        <div>
+
+            <strong>
+                QueueEase Notifications
+            </strong>
+
+            <p>
+                You'll receive updates when your queue position changes
+                and when your turn is approaching.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<section
+    id="settingsSection"
+    class="section"
+>
+
+    <div class="page-title">
+
+        <button
+            onclick="showSection('profile')"
+            type="button"
+        >
+            ←
+        </button>
+
+        <div>
+
+            <h1>
+                Settings
+            </h1>
+
+            <p>
+                Customize your QueueEase experience
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-list">
+
+        <button type="button">
+
+            <span>
+                🌙 Dark Theme
+            </span>
+
+            <span>
+                ON
+            </span>
+
+        </button>
+
+
+        <button type="button">
+
+            <span>
+                🔔 Notifications
+            </span>
+
+            <span>
+                ON
+            </span>
+
+        </button>
+
+
+        <button type="button">
+
+            <span>
+                📍 Location
+            </span>
+
+            <span>
+                Enabled
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <div class="profile-card">
+
+        <h2>
+            QueueEase
+        </h2>
+
+        <p>
+            Smart Queue Management
+        </p>
+
+        <small>
+            Version 1.0
+        </small>
+
+    </div>
+
+</section>
+
+
 </main>
 
 
-<!-- ================= ORGANIZATION MODAL ================= -->
+<!-- =====================================================
+     ORGANIZATION MODAL
+===================================================== -->
 
-<div id="organizationModal"
-     class="modal">
+<div
+    id="organizationModal"
+    class="modal"
+>
 
     <div class="modal-content">
 
         <button
             class="close-button"
-            onclick="closeModal('organizationModal')">
-
+            onclick="closeModal('organizationModal')"
+            type="button"
+        >
             ×
-
         </button>
 
 
@@ -547,19 +1107,23 @@
 </div>
 
 
-<!-- ================= JOIN QUEUE MODAL ================= -->
+<!-- =====================================================
+     JOIN QUEUE MODAL
+===================================================== -->
 
-<div id="joinModal"
-     class="modal">
+<div
+    id="joinModal"
+    class="modal"
+>
 
     <div class="modal-content">
 
         <button
             class="close-button"
-            onclick="closeModal('joinModal')">
-
+            onclick="closeModal('joinModal')"
+            type="button"
+        >
             ×
-
         </button>
 
 
@@ -598,29 +1162,29 @@
         <div class="notification-options">
 
             <button
+                type="button"
                 onclick="selectNotification('EMAIL', this)"
-                class="notification-option selected">
-
+                class="notification-option selected"
+            >
                 📧 Email
-
             </button>
 
 
             <button
+                type="button"
                 onclick="selectNotification('SMS', this)"
-                class="notification-option">
-
+                class="notification-option"
+            >
                 💬 SMS
-
             </button>
 
 
             <button
+                type="button"
                 onclick="selectNotification('CALL', this)"
-                class="notification-option">
-
+                class="notification-option"
+            >
                 📞 Call
-
             </button>
 
         </div>
@@ -639,10 +1203,10 @@
 
         <button
             onclick="joinQueue()"
-            class="primary-button">
-
+            class="primary-button"
+            type="button"
+        >
             🎫 Join Queue
-
         </button>
 
     </div>
@@ -650,19 +1214,25 @@
 </div>
 
 
-<!-- ================= TOKEN MODAL ================= -->
+<!-- =====================================================
+     TOKEN MODAL
+===================================================== -->
 
-<div id="tokenModal"
-     class="modal">
+<div
+    id="tokenModal"
+    class="modal"
+>
 
-    <div class="modal-content token-modal">
+    <div
+        class="modal-content token-modal"
+    >
 
         <button
             class="close-button"
-            onclick="closeModal('tokenModal')">
-
+            onclick="closeModal('tokenModal')"
+            type="button"
+        >
             ×
-
         </button>
 
 
@@ -706,41 +1276,34 @@
         </div>
 
 
-        <div class="qr-placeholder">
+        <!-- REAL QR CODE -->
 
-            <div class="fake-qr">
-
-                ▓ ░ ▓ ▓ ░ ▓<br>
-                ░ ▓ ░ ▓ ▓ ░<br>
-                ▓ ▓ ▓ ░ ▓ ▓<br>
-                ░ ▓ ▓ ▓ ░ ▓<br>
-                ▓ ░ ▓ ░ ▓ ▓
-
-            </div>
-
-
-            <small>
-                Show this ticket when you arrive
-            </small>
-
+        <div
+            id="qrCode"
+            class="qr-placeholder"
+        >
         </div>
+
+
+        <small>
+            Show this ticket when you arrive
+        </small>
 
 
         <p
             id="notificationMessage"
-            class="success-message">
-
+            class="success-message"
+        >
             🔔 Queue updates enabled
-
         </p>
 
 
         <button
             onclick="closeModal('tokenModal'); showSection('queue')"
-            class="primary-button">
-
+            class="primary-button"
+            type="button"
+        >
             View My Queue →
-
         </button>
 
     </div>
@@ -748,19 +1311,25 @@
 </div>
 
 
-<!-- ================= QR SCANNER ================= -->
+<!-- =====================================================
+     QR SCANNER
+===================================================== -->
 
-<div id="scannerModal"
-     class="modal">
+<div
+    id="scannerModal"
+    class="modal"
+>
 
-    <div class="modal-content scanner-content">
+    <div
+        class="modal-content scanner-content"
+    >
 
         <button
             class="close-button"
-            onclick="closeModal('scannerModal')">
-
+            onclick="closeScanner()"
+            type="button"
+        >
             ×
-
         </button>
 
 
@@ -784,7 +1353,8 @@
             <video
                 id="scannerVideo"
                 autoplay
-                playsinline>
+                playsinline
+            >
             </video>
 
             <div class="scanner-frame">
@@ -800,10 +1370,10 @@
 
         <button
             onclick="closeScanner()"
-            class="secondary-button">
-
+            class="secondary-button"
+            type="button"
+        >
             Cancel
-
         </button>
 
     </div>
@@ -811,13 +1381,17 @@
 </div>
 
 
-<!-- ================= BOTTOM NAVIGATION ================= -->
+<!-- =====================================================
+     BOTTOM NAVIGATION
+===================================================== -->
 
 <nav class="bottom-nav">
 
     <button
         onclick="showSection('home')"
-        class="nav-item active">
+        class="nav-item active"
+        type="button"
+    >
 
         <span>
             ⌂
@@ -832,7 +1406,9 @@
 
     <button
         onclick="showSection('discover')"
-        class="nav-item">
+        class="nav-item"
+        type="button"
+    >
 
         <span>
             ⌕
@@ -847,16 +1423,18 @@
 
     <button
         onclick="openScanner()"
-        class="scan-button">
-
+        class="scan-button"
+        type="button"
+    >
         📷
-
     </button>
 
 
     <button
         onclick="showSection('queue')"
-        class="nav-item">
+        class="nav-item"
+        type="button"
+    >
 
         <span>
             🎫
@@ -871,10 +1449,12 @@
 
     <button
         onclick="showSection('profile')"
-        class="nav-item">
+        class="nav-item"
+        type="button"
+    >
 
         <span>
-            ♙
+            👤
         </span>
 
         <small>
@@ -886,9 +1466,25 @@
 </nav>
 
 
-<!-- ================= SCRIPT ================= -->
+<!-- =====================================================
+     JAVASCRIPT LIBRARIES
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+></script>
+
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+></script>
+
+
+<!-- QueueEase JavaScript -->
 
 <script src="app.js"></script>
+
 
 </body>
 </html>

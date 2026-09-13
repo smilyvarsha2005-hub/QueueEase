@@ -7,10 +7,6 @@
     <title>QueueEase Live Queue</title>
 
     <style>
-        /* =========================================
-           QUEUEEASE BLACK + GOLD LUXURY THEME
-        ========================================= */
-
         * {
             box-sizing: border-box;
         }
@@ -19,10 +15,20 @@
             margin: 0;
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
+
             background:
-                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.13), transparent 35%),
-                radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.06), transparent 30%),
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(212,175,55,0.13),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 100% 100%,
+                    rgba(212,175,55,0.06),
+                    transparent 30%
+                ),
                 #050505;
+
             color: #ffffff;
 
             display: flex;
@@ -30,17 +36,11 @@
             align-items: center;
 
             padding: 25px;
-
-            overflow-x: hidden;
         }
-
-
-        /* =========================================
-           BACKGROUND GLOW
-        ========================================= */
 
         body::before {
             content: "";
+
             position: fixed;
 
             width: 350px;
@@ -48,7 +48,7 @@
 
             border-radius: 50%;
 
-            background: rgba(212, 175, 55, 0.08);
+            background: rgba(212,175,55,0.08);
 
             filter: blur(100px);
 
@@ -59,11 +59,6 @@
 
             pointer-events: none;
         }
-
-
-        /* =========================================
-           MAIN CARD
-        ========================================= */
 
         .card {
             position: relative;
@@ -80,23 +75,18 @@
             background:
                 linear-gradient(
                     145deg,
-                    rgba(25, 25, 25, 0.98),
-                    rgba(10, 10, 10, 0.98)
+                    rgba(25,25,25,0.98),
+                    rgba(10,10,10,0.98)
                 );
 
-            border: 1px solid rgba(212, 175, 55, 0.35);
+            border: 1px solid rgba(212,175,55,0.35);
 
             box-shadow:
-                0 30px 80px rgba(0, 0, 0, 0.75),
-                0 0 35px rgba(212, 175, 55, 0.06);
+                0 30px 80px rgba(0,0,0,0.75),
+                0 0 35px rgba(212,175,55,0.06);
 
             overflow: hidden;
         }
-
-
-        /* =========================================
-           GOLD TOP LINE
-        ========================================= */
 
         .card::before {
             content: "";
@@ -120,13 +110,8 @@
                 );
 
             box-shadow:
-                0 0 15px rgba(212, 175, 55, 0.7);
+                0 0 15px rgba(212,175,55,0.7);
         }
-
-
-        /* =========================================
-           BRAND
-        ========================================= */
 
         .brand-area {
             margin-bottom: 8px;
@@ -140,7 +125,7 @@
             color: #d4af37;
 
             text-shadow:
-                0 0 18px rgba(212, 175, 55, 0.25);
+                0 0 18px rgba(212,175,55,0.25);
         }
 
         .logo span {
@@ -159,11 +144,6 @@
             text-transform: uppercase;
         }
 
-
-        /* =========================================
-           LIVE INDICATOR
-        ========================================= */
-
         .live-indicator {
             display: inline-flex;
 
@@ -179,9 +159,9 @@
 
             border-radius: 30px;
 
-            background: rgba(212, 175, 55, 0.08);
+            background: rgba(212,175,55,0.08);
 
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            border: 1px solid rgba(212,175,55,0.25);
 
             color: #d4af37;
 
@@ -201,13 +181,12 @@
             background: #d4af37;
 
             box-shadow:
-                0 0 8px rgba(212, 175, 55, 0.9);
+                0 0 8px rgba(212,175,55,0.9);
 
             animation: livePulse 1.5s infinite;
         }
 
         @keyframes livePulse {
-
             0% {
                 opacity: 1;
                 transform: scale(1);
@@ -224,11 +203,6 @@
             }
         }
 
-
-        /* =========================================
-           TOKEN AREA
-        ========================================= */
-
         .token-section {
             margin-top: 8px;
 
@@ -239,11 +213,11 @@
             background:
                 linear-gradient(
                     145deg,
-                    rgba(212, 175, 55, 0.07),
-                    rgba(255, 255, 255, 0.015)
+                    rgba(212,175,55,0.07),
+                    rgba(255,255,255,0.015)
                 );
 
-            border: 1px solid rgba(212, 175, 55, 0.18);
+            border: 1px solid rgba(212,175,55,0.18);
         }
 
         .token-label {
@@ -272,13 +246,8 @@
             letter-spacing: 2px;
 
             text-shadow:
-                0 0 18px rgba(212, 175, 55, 0.25);
+                0 0 18px rgba(212,175,55,0.25);
         }
-
-
-        /* =========================================
-           STATUS
-        ========================================= */
 
         .status {
             display: inline-flex;
@@ -286,7 +255,7 @@
             align-items: center;
             justify-content: center;
 
-            min-width: 130px;
+            min-width: 150px;
 
             padding: 9px 20px;
 
@@ -296,21 +265,14 @@
 
             color: #d4af37;
 
-            border: 1px solid rgba(212, 175, 55, 0.28);
+            border: 1px solid rgba(212,175,55,0.28);
 
             font-size: 13px;
 
             font-weight: bold;
 
             letter-spacing: 0.8px;
-
-            margin-bottom: 4px;
         }
-
-
-        /* =========================================
-           INFORMATION GRID
-        ========================================= */
 
         .info {
             display: grid;
@@ -321,11 +283,6 @@
 
             margin-top: 20px;
         }
-
-
-        /* =========================================
-           INFORMATION BOX
-        ========================================= */
 
         .box {
             position: relative;
@@ -342,24 +299,7 @@
             border-radius: 18px;
 
             border: 1px solid #252525;
-
-            transition:
-                transform 0.25s ease,
-                border-color 0.25s ease,
-                box-shadow 0.25s ease;
         }
-
-        .box:hover {
-            transform: translateY(-3px);
-
-            border-color: rgba(212, 175, 55, 0.4);
-
-            box-shadow:
-                0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-
-
-        /* Small gold line */
 
         .box::after {
             content: "";
@@ -378,7 +318,6 @@
 
             border-radius: 10px;
         }
-
 
         .label {
             color: #8d8d8d;
@@ -400,11 +339,6 @@
             margin-top: 10px;
         }
 
-
-        /* =========================================
-           REFRESH MESSAGE
-        ========================================= */
-
         .refresh {
             display: flex;
 
@@ -418,8 +352,6 @@
             color: #777777;
 
             font-size: 12px;
-
-            letter-spacing: 0.3px;
         }
 
         .refresh-icon {
@@ -427,11 +359,6 @@
 
             font-size: 13px;
         }
-
-
-        /* =========================================
-           FOOTER
-        ========================================= */
 
         .footer {
             margin-top: 18px;
@@ -453,10 +380,15 @@
             color: #8d7322;
         }
 
+        .error-message {
+            margin-top: 15px;
 
-        /* =========================================
-           MOBILE
-        ========================================= */
+            color: #ff7777;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
 
         @media (max-width: 500px) {
 
@@ -474,16 +406,8 @@
                 font-size: 27px;
             }
 
-            .subtitle {
-                font-size: 11px;
-            }
-
             .token {
                 font-size: 62px;
-            }
-
-            .info {
-                gap: 10px;
             }
 
             .box {
@@ -494,41 +418,12 @@
                 font-size: 22px;
             }
         }
-
-
-        /* =========================================
-           VERY SMALL SCREENS
-        ========================================= */
-
-        @media (max-width: 350px) {
-
-            .card {
-                padding-left: 15px;
-                padding-right: 15px;
-            }
-
-            .token {
-                font-size: 55px;
-            }
-
-            .value {
-                font-size: 20px;
-            }
-        }
-
     </style>
 </head>
 
-
 <body>
 
-
 <div class="card">
-
-
-    <!-- =====================================
-         BRAND
-    ====================================== -->
 
     <div class="brand-area">
 
@@ -543,10 +438,6 @@
     </div>
 
 
-    <!-- =====================================
-         LIVE INDICATOR
-    ====================================== -->
-
     <div class="live-indicator">
 
         <div class="live-dot"></div>
@@ -555,10 +446,6 @@
 
     </div>
 
-
-    <!-- =====================================
-         TOKEN
-    ====================================== -->
 
     <div class="token-section">
 
@@ -573,11 +460,6 @@
             #--
         </div>
 
-
-        <!-- =================================
-             STATUS
-        ================================== -->
-
         <div
             class="status"
             id="status"
@@ -588,12 +470,7 @@
     </div>
 
 
-    <!-- =====================================
-         QUEUE INFORMATION
-    ====================================== -->
-
     <div class="info">
-
 
         <div class="box">
 
@@ -626,13 +503,14 @@
 
         </div>
 
-
     </div>
 
 
-    <!-- =====================================
-         REFRESH
-    ====================================== -->
+    <div
+        id="errorMessage"
+        class="error-message"
+    ></div>
+
 
     <div class="refresh">
 
@@ -645,10 +523,6 @@
     </div>
 
 
-    <!-- =====================================
-         FOOTER
-    ====================================== -->
-
     <div class="footer">
 
         Powered by
@@ -656,140 +530,152 @@
 
     </div>
 
-
 </div>
-
 
 
 <script>
 
-/* ================================
-   TOKEN
-================================ */
+/* =====================================================
+   QUEUEEASE LIVE QUEUE
+   DIRECT SPRING BOOT CONNECTION
+===================================================== */
+
+
+/* ================= API ================= */
+
+const API_BASE =
+    "http://localhost:8080";
+
+
+/* ================= GET TOKEN ================= */
 
 const params =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+        window.location.search
+    );
+
 
 const tokenNumber =
     params.get("token");
 
 
-/* ================================
-   STATUS VARIABLES
-================================ */
-
-let previousStatus = null;
-let notificationShown = false;
+console.log(
+    "QR TOKEN:",
+    tokenNumber
+);
 
 
-/* ================================
-   AUDIO VARIABLES
-================================ */
+/* ================= ELEMENTS ================= */
+
+const tokenElement =
+    document.getElementById(
+        "tokenNumber"
+    );
+
+
+const positionElement =
+    document.getElementById(
+        "position"
+    );
+
+
+const waitElement =
+    document.getElementById(
+        "wait"
+    );
+
+
+const statusElement =
+    document.getElementById(
+        "status"
+    );
+
+
+const errorElement =
+    document.getElementById(
+        "errorMessage"
+    );
+
+
+/* ================= AUDIO ================= */
 
 let audioContext = null;
-let audioUnlocked = false;
+
+let previousStatus = null;
 
 
-/* ================================
-   UNLOCK AUDIO
-================================ */
+/* ================= UNLOCK AUDIO ================= */
 
 function unlockAudio() {
 
-    if (audioUnlocked) {
-        return;
-    }
-
     try {
 
-        audioContext =
-            new (window.AudioContext ||
-                 window.webkitAudioContext)();
+        if (!audioContext) {
 
-        if (audioContext.state === "suspended") {
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+        if (
+            audioContext.state ===
+            "suspended"
+        ) {
 
             audioContext.resume();
 
         }
 
-        audioUnlocked = true;
+    }
 
-        console.log("🔊 Audio unlocked");
-
-    } catch (error) {
+    catch (error) {
 
         console.error(
-            "Audio unlock failed:",
+            "Audio error:",
             error
         );
+
     }
+
 }
 
 
-/* ================================
-   BROWSER NOTIFICATION PERMISSION
-================================ */
-
-async function requestNotificationPermission() {
-
-    if ("Notification" in window) {
-
-        if (Notification.permission === "default") {
-
-            await Notification.requestPermission();
-
-        }
-
-    }
-}
-
-
-/* ================================
-   BUZZER
-================================ */
+/* ================= BUZZER ================= */
 
 function playBuzzer() {
 
     try {
 
-        if (!audioContext) {
-
-            unlockAudio();
-
-        }
+        unlockAudio();
 
         if (!audioContext) {
-
-            console.log(
-                "Audio context unavailable"
-            );
-
             return;
-        }
-
-
-        if (audioContext.state === "suspended") {
-
-            audioContext.resume();
-
         }
 
 
         const oscillator =
             audioContext.createOscillator();
 
-        const gainNode =
+
+        const gain =
             audioContext.createGain();
 
 
-        oscillator.connect(gainNode);
+        oscillator.connect(
+            gain
+        );
 
-        gainNode.connect(
+
+        gain.connect(
             audioContext.destination
         );
 
 
-        oscillator.type = "sine";
+        oscillator.type =
+            "sine";
 
 
         oscillator.frequency.setValueAtTime(
@@ -804,13 +690,19 @@ function playBuzzer() {
         );
 
 
-        gainNode.gain.setValueAtTime(
-            0.4,
+        oscillator.frequency.setValueAtTime(
+            900,
+            audioContext.currentTime + 0.45
+        );
+
+
+        gain.gain.setValueAtTime(
+            0.35,
             audioContext.currentTime
         );
 
 
-        gainNode.gain.exponentialRampToValueAtTime(
+        gain.gain.exponentialRampToValueAtTime(
             0.01,
             audioContext.currentTime + 0.8
         );
@@ -824,27 +716,69 @@ function playBuzzer() {
         );
 
 
-        console.log("🔔 Buzzer played");
+        console.log(
+            "🔔 Buzzer played"
+        );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
-            "Buzzer error:",
+            "Buzzer failed:",
             error
         );
+
     }
+
 }
 
 
-/* ================================
-   SHOW BROWSER NOTIFICATION
-================================ */
+/* ================= NOTIFICATION ================= */
 
-function showTurnNotification(token) {
+async function requestNotificationPermission() {
+
+    if (
+        "Notification" in window
+    ) {
+
+        try {
+
+            if (
+                Notification.permission ===
+                "default"
+            ) {
+
+                await Notification.requestPermission();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Notification permission error:",
+                error
+            );
+
+        }
+
+    }
+
+}
+
+
+/* ================= TURN NOTIFICATION ================= */
+
+function showTurnNotification(
+    token
+) {
 
     if (
         "Notification" in window &&
-        Notification.permission === "granted"
+        Notification.permission ===
+        "granted"
     ) {
 
         new Notification(
@@ -853,125 +787,129 @@ function showTurnNotification(token) {
                 body:
                     "It's your turn! Token #" +
                     token.tokenNumber +
-                    " is being called.",
-
-                icon: "/favicon.ico"
+                    " is being called."
             }
         );
 
     }
+
 }
 
 
-/* ================================
-   LIVE QUEUE
-================================ */
+/* =====================================================
+   LOAD TOKEN STATUS
+===================================================== */
 
 async function loadQueue() {
 
+    /* ================= VALIDATE TOKEN ================= */
+
     if (!tokenNumber) {
 
-        document.getElementById(
-            "status"
-        ).textContent =
+        tokenElement.textContent =
+            "#--";
+
+        statusElement.textContent =
             "Invalid Token";
 
+        errorElement.textContent =
+            "No token number was provided in the QR link.";
+
         return;
+
     }
+
+
+    /* ================= API URL ================= */
+
+    const url =
+        API_BASE +
+        "/queue/status/" +
+        encodeURIComponent(
+            tokenNumber
+        );
+
+
+    console.log(
+        "Calling:",
+        url
+    );
 
 
     try {
 
         const response =
             await fetch(
-                "/queue/status/" +
-                Number(tokenNumber)
+                url
             );
 
 
         console.log(
-            "Token requested:",
-            tokenNumber
-        );
-
-
-        console.log(
-            "Response status:",
+            "HTTP STATUS:",
             response.status
         );
 
 
+        /* ================= API ERROR ================= */
+
         if (!response.ok) {
 
+            const errorText =
+                await response.text();
+
+
+            console.error(
+                "API ERROR:",
+                errorText
+            );
+
+
             throw new Error(
-                "HTTP Error: " +
+                "HTTP " +
                 response.status
             );
 
         }
 
 
-        const text =
-            await response.text();
+        /* ================= JSON ================= */
+
+        const token =
+            await response.json();
 
 
         console.log(
-            "Server response:",
-            text
+            "TOKEN DETAILS:",
+            token
         );
 
 
-        if (!text) {
+        /* ================= TOKEN ================= */
 
-            throw new Error(
-                "Empty response from server"
-            );
-
-        }
+        tokenElement.textContent =
+            "#" +
+            token.tokenNumber;
 
 
-        const token =
-            JSON.parse(text);
+        /* ================= POSITION ================= */
 
-
-        /* ================================
-           TOKEN INFORMATION
-        ================================= */
-
-        document.getElementById(
-            "tokenNumber"
-        ).textContent =
-            "#" + token.tokenNumber;
-
-
-        document.getElementById(
-            "position"
-        ).textContent =
+        positionElement.textContent =
             token.queuePosition;
 
 
-        document.getElementById(
-            "wait"
-        ).textContent =
+        /* ================= WAIT ================= */
+
+        waitElement.textContent =
             token.estimatedWaitingTime +
             " min";
 
 
-        /* ================================
-           STATUS
-        ================================= */
+        /* ================= STATUS ================= */
 
-        const statusElement =
-            document.getElementById(
-                "status"
-            );
-
-
-        /* ================================
-           CALLED
-        ================================= */
-
-        if (token.status === "CALLED") {
+        if (
+            token.status ===
+            "CALLED"
+        ) {
 
             statusElement.textContent =
                 "🔔 YOUR TURN";
@@ -985,31 +923,31 @@ async function loadQueue() {
                 "#ffd166";
 
 
-            /* ================================
-               NOTIFY ONCE
-            ================================= */
+            statusElement.style.borderColor =
+                "#d4af37";
+
+
+            /* ================= BUZZ ================= */
 
             if (
-                previousStatus !== "CALLED" &&
-                !notificationShown
+                previousStatus !==
+                "CALLED"
             ) {
 
                 playBuzzer();
 
-                showTurnNotification(token);
-
-                notificationShown = true;
+                showTurnNotification(
+                    token
+                );
 
             }
 
         }
 
-
-        /* ================================
-           SERVED
-        ================================= */
-
-        else if (token.status === "SERVED") {
+        else if (
+            token.status ===
+            "SERVED"
+        ) {
 
             statusElement.textContent =
                 "✅ SERVED";
@@ -1023,14 +961,10 @@ async function loadQueue() {
                 "#55e6a5";
 
 
-            notificationShown = false;
+            statusElement.style.borderColor =
+                "#55e6a5";
 
         }
-
-
-        /* ================================
-           WAITING
-        ================================= */
 
         else {
 
@@ -1039,75 +973,77 @@ async function loadQueue() {
 
 
             statusElement.style.background =
-                "#173c2c";
+                "#24200f";
 
 
             statusElement.style.color =
-                "#55e6a5";
+                "#d4af37";
 
 
-            notificationShown = false;
+            statusElement.style.borderColor =
+                "rgba(212,175,55,0.28)";
 
         }
 
 
-        /* ================================
-           REMEMBER STATUS
-        ================================= */
+        /* ================= CLEAR ERROR ================= */
+
+        errorElement.textContent =
+            "";
+
+
+        /* ================= SAVE STATUS ================= */
 
         previousStatus =
             token.status;
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
         console.error(
-            "Queue error:",
+            "Live queue error:",
             error
         );
 
 
-        document.getElementById(
-            "status"
-        ).textContent =
-            "Error: " +
-            error.message;
+        statusElement.textContent =
+            "CONNECTION ERROR";
+
+
+        statusElement.style.background =
+            "#3b1717";
+
+
+        statusElement.style.color =
+            "#ff7777";
+
+
+        errorElement.textContent =
+            "Unable to connect to QueueEase server. " +
+            "Make sure Spring Boot is running on port 8080.";
 
     }
+
 }
 
 
-/* ================================
-   USER INTERACTION
-   UNLOCKS BROWSER AUDIO
-================================ */
+/* ================= USER CLICK ================= */
 
 document.addEventListener(
     "click",
-    unlockAudio,
-    { once: true }
+    unlockAudio
 );
 
 
-document.addEventListener(
-    "touchstart",
-    unlockAudio,
-    { once: true }
-);
-
-
-/* ================================
-   START
-================================ */
+/* ================= START ================= */
 
 requestNotificationPermission();
 
 loadQueue();
 
 
-/* ================================
-   AUTO REFRESH
-================================ */
+/* ================= AUTO REFRESH ================= */
 
 setInterval(
     loadQueue,
