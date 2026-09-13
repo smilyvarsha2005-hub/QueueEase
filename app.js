@@ -79,6 +79,79 @@ async function loadOrganizations(category = "") {
         </div>
     `;
 
+
+    // ================= FALLBACK ORGANIZATIONS =================
+    // Used when GitHub Pages cannot reach localhost Spring Boot
+
+    const fallbackOrganizations = [
+
+        {
+            organizationId: 1,
+            organizationName: "QueueEase Hospital",
+            organizationCode: "QE-HOSP-001",
+            category: "Hospital",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 2,
+            organizationName: "QueueEase College",
+            organizationCode: "QE-COL-001",
+            category: "College",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 3,
+            organizationName: "QueueEase Salon",
+            organizationCode: "QE-SAL-001",
+            category: "Salon",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 4,
+            organizationName: "QueueEase Restaurant",
+            organizationCode: "QE-RES-001",
+            category: "Restaurant",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 5,
+            organizationName: "QueueEase Bank",
+            organizationCode: "QE-BANK-001",
+            category: "Bank",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 6,
+            organizationName: "QueueEase Service Center",
+            organizationCode: "QE-SC-001",
+            category: "Service Center",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 7,
+            organizationName: "QueueEase Rental",
+            organizationCode: "QE-RENT-001",
+            category: "Rental",
+            address: "Hyderabad"
+        },
+
+        {
+            organizationId: 8,
+            organizationName: "QueueEase Government Office",
+            organizationCode: "QE-GOV-001",
+            category: "Government",
+            address: "Hyderabad"
+        }
+
+    ];
+
+
     try {
 
         const response =
@@ -95,58 +168,58 @@ async function loadOrganizations(category = "") {
         organizations =
             await response.json();
 
-        let filtered =
-            organizations;
-
-        if (category) {
-
-            const selected =
-                String(category)
-                    .toLowerCase()
-                    .trim();
-
-            filtered =
-                organizations.filter(org => {
-
-                    const name =
-                        String(
-                            org.organizationName || ""
-                        ).toLowerCase();
-
-                    const code =
-                        String(
-                            org.organizationCode || ""
-                        ).toLowerCase();
-
-                    const orgCategory =
-                        String(
-                            org.category || ""
-                        ).toLowerCase();
-
-                    return (
-                        name.includes(selected) ||
-                        code.includes(selected) ||
-                        orgCategory.includes(selected)
-                    );
-                });
-        }
-
-        renderOrganizations(filtered);
-
     } catch (error) {
 
-        console.error(
-            "Organization loading error:",
+        console.log(
+            "Backend unavailable. Using fallback organizations.",
             error
         );
 
-        list.innerHTML = `
-            <div class="empty-state">
-                <h3>Unable to load organizations</h3>
-                <p>Make sure Spring Boot is running.</p>
-            </div>
-        `;
+        organizations =
+            fallbackOrganizations;
     }
+
+
+    // ================= FILTER =================
+
+    let filtered =
+        organizations;
+
+    if (category) {
+
+        const selected =
+            String(category)
+                .toLowerCase()
+                .trim();
+
+        filtered =
+            organizations.filter(org => {
+
+                const name =
+                    String(
+                        org.organizationName || ""
+                    ).toLowerCase();
+
+                const code =
+                    String(
+                        org.organizationCode || ""
+                    ).toLowerCase();
+
+                const orgCategory =
+                    String(
+                        org.category || ""
+                    ).toLowerCase();
+
+                return (
+                    name.includes(selected) ||
+                    code.includes(selected) ||
+                    orgCategory.includes(selected)
+                );
+            });
+    }
+
+
+    renderOrganizations(filtered);
 }
 
 
@@ -172,6 +245,7 @@ function renderOrganizations(list) {
 
         return;
     }
+
 
     container.innerHTML =
         list.map(org => {
@@ -253,12 +327,14 @@ async function searchOrganizations() {
             .trim()
             .toLowerCase();
 
+
     if (
         !organizations ||
         organizations.length === 0
     ) {
         await loadOrganizations();
     }
+
 
     let filtered =
         organizations;
@@ -297,6 +373,7 @@ async function searchOrganizations() {
             });
     }
 
+
     if (
         input === homeInput &&
         search !== ""
@@ -314,6 +391,7 @@ async function searchOrganizations() {
             "discoverSection"
         )?.classList.add("active");
 
+
         document.querySelectorAll(
             ".nav-item"
         ).forEach(item => {
@@ -322,15 +400,18 @@ async function searchOrganizations() {
             );
         });
 
+
         document.querySelector(
             ".nav-item:nth-child(2)"
         )?.classList.add("active");
+
 
         if (discoverInput) {
             discoverInput.value =
                 input.value;
         }
     }
+
 
     renderOrganizations(filtered);
 }
@@ -352,6 +433,7 @@ async function openOrganization(id) {
         return;
     }
 
+
     const name =
         selectedOrganization.organizationName ||
         "QueueEase Organization";
@@ -359,6 +441,7 @@ async function openOrganization(id) {
     const address =
         selectedOrganization.address ||
         "Hyderabad";
+
 
     const organizationName =
         document.getElementById(
@@ -370,6 +453,7 @@ async function openOrganization(id) {
             name;
     }
 
+
     const organizationAddress =
         document.getElementById(
             "organizationAddress"
@@ -380,6 +464,7 @@ async function openOrganization(id) {
             address;
     }
 
+
     const modal =
         document.getElementById(
             "organizationModal"
@@ -389,123 +474,95 @@ async function openOrganization(id) {
         modal.classList.add("active");
     }
 
+
     await loadServices(id);
 }
 
 
 // ================= SERVICES =================
 
-async function loadServices(
-    organizationId
-) {
-
-    const serviceList =
-        document.getElementById(
-            "serviceList"
-        );
+async function loadServices(organizationId) {
+    const serviceList = document.getElementById("serviceList");
 
     if (!serviceList) return;
 
     serviceList.innerHTML = `
-        <p>Loading services...</p>
+        <p style="text-align:center;">Loading services...</p>
     `;
 
+    // GitHub Pages fallback services
+    const fallbackServices = {
+        1: [
+            { serviceId: 1, serviceName: "General Consultation", estimatedServiceTime: 10 },
+            { serviceId: 2, serviceName: "Emergency Consultation", estimatedServiceTime: 15 },
+            { serviceId: 3, serviceName: "Health Checkup", estimatedServiceTime: 10 }
+        ],
+
+        2: [
+            { serviceId: 4, serviceName: "Admissions", estimatedServiceTime: 10 },
+            { serviceId: 5, serviceName: "Student Services", estimatedServiceTime: 5 },
+            { serviceId: 6, serviceName: "Fee Payment", estimatedServiceTime: 5 }
+        ],
+
+        3: [
+            { serviceId: 7, serviceName: "Haircut", estimatedServiceTime: 20 },
+            { serviceId: 8, serviceName: "Hair Styling", estimatedServiceTime: 25 },
+            { serviceId: 9, serviceName: "Facial", estimatedServiceTime: 30 }
+        ],
+
+        4: [
+            { serviceId: 10, serviceName: "Table Reservation", estimatedServiceTime: 5 },
+            { serviceId: 11, serviceName: "Food Order", estimatedServiceTime: 15 },
+            { serviceId: 12, serviceName: "Takeaway", estimatedServiceTime: 10 }
+        ],
+
+        5: [
+            { serviceId: 13, serviceName: "Cash Counter", estimatedServiceTime: 10 },
+            { serviceId: 14, serviceName: "Account Services", estimatedServiceTime: 15 },
+            { serviceId: 15, serviceName: "Loan Services", estimatedServiceTime: 20 }
+        ],
+
+        6: [
+            { serviceId: 16, serviceName: "Vehicle Service", estimatedServiceTime: 30 },
+            { serviceId: 17, serviceName: "Repair Service", estimatedServiceTime: 25 },
+            { serviceId: 18, serviceName: "General Service", estimatedServiceTime: 20 }
+        ],
+
+        7: [
+            { serviceId: 19, serviceName: "Bike Rental", estimatedServiceTime: 10 },
+            { serviceId: 20, serviceName: "Car Rental", estimatedServiceTime: 15 },
+            { serviceId: 21, serviceName: "Vehicle Return", estimatedServiceTime: 10 }
+        ],
+
+        8: [
+            { serviceId: 22, serviceName: "General Enquiry", estimatedServiceTime: 10 },
+            { serviceId: 23, serviceName: "Certificate Services", estimatedServiceTime: 15 },
+            { serviceId: 24, serviceName: "Application Services", estimatedServiceTime: 15 }
+        ]
+    };
+
     try {
-
-        const url =
-            `${API_BASE}/services/${organizationId}`;
-
-        console.log(
-            "Services API:",
-            url
+        const response = await fetch(
+            `${API_BASE}/services/${organizationId}`
         );
-
-        const response =
-            await fetch(url);
 
         if (!response.ok) {
-
-            throw new Error(
-                `Services API returned ${response.status}`
-            );
+            throw new Error("Backend unavailable");
         }
 
-        const services =
-            await response.json();
+        const services = await response.json();
 
-        console.log(
-            "Services received:",
-            services
-        );
-
-        if (
-            !Array.isArray(services) ||
-            services.length === 0
-        ) {
-
-            serviceList.innerHTML = `
-                <p>No services available.</p>
-            `;
-
-            return;
-        }
-
-        serviceList.innerHTML =
-            services.map(service => {
-
-                const id =
-                    service.serviceId;
-
-                const name =
-                    service.serviceName ||
-                    "Service";
-
-                const time =
-                    service.estimatedServiceTime ||
-                    5;
-
-                return `
-                    <button
-                        class="service-option"
-                        onclick="selectService(
-                            ${id},
-                            '${escapeText(name)}'
-                        )"
-                    >
-
-                        <div>
-
-                            <strong>
-                                ${name}
-                            </strong>
-
-                            <small>
-                                Estimated time:
-                                ${time} min
-                            </small>
-
-                        </div>
-
-                        <span>→</span>
-
-                    </button>
-                `;
-
-            }).join("");
+        renderServices(services);
 
     } catch (error) {
+        console.log("Using GitHub fallback services");
 
-        console.error(
-            "Service loading error:",
-            error
-        );
+        const services =
+            fallbackServices[organizationId] || [];
 
-        serviceList.innerHTML = `
-            <p>Unable to load services.</p>
-        `;
+        renderServices(services);
     }
 }
-
 
 // ================= SELECT SERVICE =================
 
@@ -517,10 +574,12 @@ function selectService(
     selectedService =
         serviceId;
 
+
     const selectedServiceElement =
         document.getElementById(
             "selectedService"
         );
+
 
     if (selectedServiceElement) {
 
@@ -528,9 +587,11 @@ function selectService(
             serviceName;
     }
 
+
     closeModal(
         "organizationModal"
     );
+
 
     document.getElementById(
         "joinModal"
@@ -548,6 +609,7 @@ function selectNotification(
     selectedNotificationMethod =
         method;
 
+
     document.querySelectorAll(
         ".notification-option"
     ).forEach(btn => {
@@ -557,18 +619,22 @@ function selectNotification(
         );
     });
 
+
     if (button) {
         button.classList.add(
             "selected"
         );
     }
 
+
     const contact =
         document.getElementById(
             "contact"
         );
 
+
     if (!contact) return;
+
 
     if (method === "EMAIL") {
 
@@ -592,10 +658,12 @@ async function joinQueue() {
             "customerName"
         )?.value.trim();
 
+
     const contact =
         document.getElementById(
             "contact"
         )?.value.trim();
+
 
     if (!customerName) {
 
@@ -606,6 +674,7 @@ async function joinQueue() {
         return;
     }
 
+
     if (!contact) {
 
         alert(
@@ -614,6 +683,7 @@ async function joinQueue() {
 
         return;
     }
+
 
     if (!selectedOrganization) {
 
@@ -624,6 +694,7 @@ async function joinQueue() {
         return;
     }
 
+
     if (!selectedService) {
 
         alert(
@@ -633,9 +704,11 @@ async function joinQueue() {
         return;
     }
 
+
     const organizationId =
         selectedOrganization.organizationId ??
         selectedOrganization.id;
+
 
     const url =
         `${API_BASE}/queue/take?` +
@@ -646,6 +719,7 @@ async function joinQueue() {
         `&serviceId=${selectedService}` +
         `&customerId=1`;
 
+
     try {
 
         console.log(
@@ -653,37 +727,45 @@ async function joinQueue() {
             url
         );
 
+
         const response =
             await fetch(url, {
                 method: "GET"
             });
+
 
         if (!response.ok) {
 
             const message =
                 await response.text();
 
+
             console.error(
                 "Queue error:",
                 message
             );
+
 
             throw new Error(
                 message
             );
         }
 
+
         const token =
             await response.json();
+
 
         console.log(
             "Token received:",
             token
         );
 
+
         closeModal(
             "joinModal"
         );
+
 
         displayToken(token);
 
@@ -693,6 +775,7 @@ async function joinQueue() {
             "Join Queue Error:",
             error
         );
+
 
         alert(
             "Unable to join queue.\n\n" +
@@ -711,10 +794,12 @@ function displayToken(data) {
         data.token_number ??
         "--";
 
+
     const queuePosition =
         data.queuePosition ??
         data.queue_position ??
         "--";
+
 
     const waitTime =
         data.estimatedWaitingTime ??
@@ -729,16 +814,19 @@ function displayToken(data) {
             "tokenNumber"
         );
 
+
     if (tokenNumberElement) {
 
         tokenNumberElement.textContent =
             "#" + tokenNumber;
     }
 
+
     const tokenPositionElement =
         document.getElementById(
             "tokenPosition"
         );
+
 
     if (tokenPositionElement) {
 
@@ -746,10 +834,12 @@ function displayToken(data) {
             queuePosition;
     }
 
+
     const tokenWaitElement =
         document.getElementById(
             "tokenWait"
         );
+
 
     if (tokenWaitElement) {
 
@@ -765,16 +855,19 @@ function displayToken(data) {
             "queueToken"
         );
 
+
     if (queueToken) {
 
         queueToken.textContent =
             "#" + tokenNumber;
     }
 
+
     const queuePositionElement =
         document.getElementById(
             "queuePosition"
         );
+
 
     if (queuePositionElement) {
 
@@ -782,10 +875,12 @@ function displayToken(data) {
             queuePosition;
     }
 
+
     const queueWait =
         document.getElementById(
             "queueWait"
         );
+
 
     if (queueWait) {
 
@@ -801,6 +896,7 @@ function displayToken(data) {
             "activeOrganization"
         );
 
+
     if (activeOrganization) {
 
         activeOrganization.textContent =
@@ -809,10 +905,12 @@ function displayToken(data) {
             "QueueEase";
     }
 
+
     const activeTokenNumber =
         document.getElementById(
             "activeTokenNumber"
         );
+
 
     if (activeTokenNumber) {
 
@@ -820,10 +918,12 @@ function displayToken(data) {
             "#" + tokenNumber;
     }
 
+
     const activePosition =
         document.getElementById(
             "activePosition"
         );
+
 
     if (activePosition) {
 
@@ -831,16 +931,19 @@ function displayToken(data) {
             queuePosition;
     }
 
+
     const activeWait =
         document.getElementById(
             "activeWait"
         );
+
 
     if (activeWait) {
 
         activeWait.textContent =
             waitTime + " min";
     }
+
 
     document.getElementById(
         "activeTicket"
@@ -857,10 +960,12 @@ function displayToken(data) {
             Number(queuePosition) - 1
         );
 
+
     const peopleAhead =
         document.getElementById(
             "peopleAhead"
         );
+
 
     if (peopleAhead) {
 
@@ -876,6 +981,7 @@ function displayToken(data) {
         document.getElementById(
             "queueProgress"
         );
+
 
     if (progress) {
 
@@ -900,6 +1006,7 @@ function displayToken(data) {
             "notificationMessage"
         );
 
+
     if (notificationMessage) {
 
         notificationMessage.textContent =
@@ -922,6 +1029,7 @@ function displayToken(data) {
             "qrCode"
         );
 
+
     if (
         qrCode &&
         tokenNumber !== "--"
@@ -929,11 +1037,13 @@ function displayToken(data) {
 
         qrCode.innerHTML = "";
 
+
         const basePath =
             window.location.pathname.substring(
                 0,
                 window.location.pathname.lastIndexOf("/") + 1
             );
+
 
         const liveQueueURL =
             window.location.origin +
@@ -943,13 +1053,12 @@ function displayToken(data) {
                 tokenNumber
             );
 
+
         console.log(
             "REAL QR URL:",
             liveQueueURL
         );
 
-
-        // Use QRCode library from index.html
 
         if (
             typeof QRCode !== "undefined"
@@ -978,6 +1087,7 @@ function displayToken(data) {
             console.error(
                 "QRCode library not loaded."
             );
+
 
             qrCode.innerHTML = `
                 <div
@@ -1015,9 +1125,12 @@ async function refreshQueue() {
             "queueEaseToken"
         );
 
+
     if (!saved) return;
 
+
     let oldData;
+
 
     try {
 
@@ -1034,6 +1147,7 @@ async function refreshQueue() {
         return;
     }
 
+
     try {
 
         const response =
@@ -1041,14 +1155,18 @@ async function refreshQueue() {
                 `${API_BASE}/queue/all`
             );
 
+
         if (!response.ok) return;
+
 
         const tokens =
             await response.json();
 
+
         const oldTokenNumber =
             oldData.tokenNumber ??
             oldData.token_number;
+
 
         const current =
             tokens.find(token =>
@@ -1058,7 +1176,9 @@ async function refreshQueue() {
                 ) == oldTokenNumber
             );
 
+
         if (!current) return;
+
 
         displayQueueData(
             current
@@ -1082,9 +1202,11 @@ function displayQueueData(data) {
         data.tokenNumber ??
         data.token_number;
 
+
     const queuePosition =
         data.queuePosition ??
         data.queue_position;
+
 
     const waitTime =
         data.estimatedWaitingTime ??
@@ -1095,6 +1217,7 @@ function displayQueueData(data) {
         document.getElementById(
             "queueToken"
         );
+
 
     if (queueToken) {
 
@@ -1108,6 +1231,7 @@ function displayQueueData(data) {
             "queuePosition"
         );
 
+
     if (queuePositionElement) {
 
         queuePositionElement.textContent =
@@ -1119,6 +1243,7 @@ function displayQueueData(data) {
         document.getElementById(
             "queueWait"
         );
+
 
     if (queueWait) {
 
@@ -1133,10 +1258,12 @@ function displayQueueData(data) {
             Number(queuePosition) - 1
         );
 
+
     const peopleAhead =
         document.getElementById(
             "peopleAhead"
         );
+
 
     if (peopleAhead) {
 
@@ -1150,6 +1277,7 @@ function displayQueueData(data) {
         document.getElementById(
             "queueProgress"
         );
+
 
     if (progress) {
 
@@ -1172,6 +1300,7 @@ function displayQueueData(data) {
             "activeTokenNumber"
         );
 
+
     if (activeTokenNumber) {
 
         activeTokenNumber.textContent =
@@ -1183,6 +1312,7 @@ function displayQueueData(data) {
         document.getElementById(
             "activePosition"
         );
+
 
     if (activePosition) {
 
@@ -1196,6 +1326,7 @@ function displayQueueData(data) {
             "activeWait"
         );
 
+
     if (activeWait) {
 
         activeWait.textContent =
@@ -1207,6 +1338,7 @@ function displayQueueData(data) {
         document.getElementById(
             "activeOrganization"
         );
+
 
     if (
         activeOrganization &&
@@ -1226,12 +1358,14 @@ function closeModal(id) {
     const modal =
         document.getElementById(id);
 
+
     if (modal) {
 
         modal.classList.remove(
             "active"
         );
     }
+
 
     if (
         id === "scannerModal"
@@ -1255,7 +1389,9 @@ async function openScanner() {
             "scannerModal"
         );
 
+
     if (!modal) return;
+
 
     modal.classList.add(
         "active"
@@ -1267,10 +1403,12 @@ async function openScanner() {
             "scannerVideo"
         );
 
+
     const message =
         document.getElementById(
             "scannerMessage"
         );
+
 
     if (!video) return;
 
@@ -1323,7 +1461,9 @@ async function openScanner() {
         video.srcObject =
             scannerStream;
 
+
         await video.play();
+
 
         scannerRunning = true;
 
@@ -1347,11 +1487,13 @@ async function openScanner() {
             error
         );
 
+
         if (message) {
 
             message.textContent =
                 "Camera permission was not available.";
         }
+
 
         stopScanner();
     }
@@ -1369,6 +1511,7 @@ async function scanQRCode(
         return;
     }
 
+
     try {
 
         const barcodes =
@@ -1384,6 +1527,7 @@ async function scanQRCode(
             const qrData =
                 barcodes[0].rawValue;
 
+
             console.log(
                 "QR Code detected:",
                 qrData
@@ -1392,6 +1536,7 @@ async function scanQRCode(
 
             scannerRunning =
                 false;
+
 
             stopScanner();
 
@@ -1430,6 +1575,7 @@ async function scanQRCode(
                         window.location.pathname.lastIndexOf("/") + 1
                     );
 
+
                 window.location.href =
                     window.location.origin +
                     basePath +
@@ -1447,11 +1593,13 @@ async function scanQRCode(
                     "scannerMessage"
                 );
 
+
             if (message) {
 
                 message.textContent =
                     "Invalid QueueEase QR code.";
             }
+
 
             return;
         }
@@ -1486,7 +1634,9 @@ function closeScanner() {
     scannerRunning =
         false;
 
+
     stopScanner();
+
 
     closeModal(
         "scannerModal"
@@ -1512,6 +1662,7 @@ function stopScanner() {
 
             });
 
+
         scannerStream =
             null;
     }
@@ -1521,6 +1672,7 @@ function stopScanner() {
         document.getElementById(
             "scannerVideo"
         );
+
 
     if (video) {
 
@@ -1562,6 +1714,7 @@ document.addEventListener(
             "home"
         );
 
+
         loadOrganizations();
 
 
@@ -1579,6 +1732,7 @@ document.addEventListener(
                     JSON.parse(
                         saved
                     );
+
 
                 if (data) {
 
@@ -1610,10 +1764,12 @@ function displayTokenDataWithoutModal(
         data.token_number ??
         "--";
 
+
     const queuePosition =
         data.queuePosition ??
         data.queue_position ??
         "--";
+
 
     const waitTime =
         data.estimatedWaitingTime ??
@@ -1633,6 +1789,7 @@ function displayTokenDataWithoutModal(
             "activeTokenNumber"
         );
 
+
     if (activeTokenNumber) {
 
         activeTokenNumber.textContent =
@@ -1644,6 +1801,7 @@ function displayTokenDataWithoutModal(
         document.getElementById(
             "activePosition"
         );
+
 
     if (activePosition) {
 
@@ -1657,6 +1815,7 @@ function displayTokenDataWithoutModal(
             "activeWait"
         );
 
+
     if (activeWait) {
 
         activeWait.textContent =
@@ -1668,6 +1827,7 @@ function displayTokenDataWithoutModal(
         document.getElementById(
             "activeOrganization"
         );
+
 
     if (activeOrganization) {
 
