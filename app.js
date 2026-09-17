@@ -477,7 +477,41 @@ async function openOrganization(id) {
 
     await loadServices(id);
 }
+function renderServices(services) {
+    const serviceList = document.getElementById("serviceList");
 
+    if (!serviceList) return;
+
+    if (!services || services.length === 0) {
+        serviceList.innerHTML = `
+            <p style="text-align:center;">No services available.</p>
+        `;
+        return;
+    }
+
+    serviceList.innerHTML = services.map(service => {
+        const id = service.serviceId || service.id;
+        const name = service.serviceName || service.name || "Service";
+        const time =
+            service.estimatedServiceTime ||
+            service.estimated_service_time ||
+            5;
+
+        return `
+            <button
+                class="service-option"
+                onclick="selectService(${id}, '${String(name).replace(/'/g, "\\'")}')">
+
+                <div>
+                    <strong>${name}</strong>
+                    <small>Estimated time: ${time} min</small>
+                </div>
+
+                <span>→</span>
+            </button>
+        `;
+    }).join("");
+}
 
 // ================= SERVICES =================
 async function loadServices(organizationId) {
